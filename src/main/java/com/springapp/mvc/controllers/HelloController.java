@@ -1,4 +1,4 @@
-package com.springapp.mvc;
+package com.springapp.mvc.controllers;
 
 import com.springapp.mvc.model.User;
 import com.springapp.mvc.repository.UserRepository;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-
 public class HelloController
 {
     @Autowired
@@ -38,9 +37,7 @@ public class HelloController
 
     @RequestMapping(value = "/",method = RequestMethod.GET)
 	public String printWelcome(ModelMap model) {
-        int a =0;
-		model.addAttribute("message", "Hello world! Test push dsads");
-        a = 1;
+		model.addAttribute("message", "Hello world! Test push");
 		return "hello";
 	}
 }

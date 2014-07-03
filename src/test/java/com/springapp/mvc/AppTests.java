@@ -1,6 +1,10 @@
 package com.springapp.mvc;
 
+import com.springapp.mvc.model.Order;
+import com.springapp.mvc.model.RestaurantTable;
 import com.springapp.mvc.model.User;
+import com.springapp.mvc.repository.OrderRepository;
+import com.springapp.mvc.repository.RestaurantTableRepository;
 import com.springapp.mvc.repository.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,6 +34,13 @@ public class AppTests {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private RestaurantTableRepository tableRepository;
+
+
     @Before
     public void setup() {
         this.mockMvc = webAppContextSetup(this.wac).build();
@@ -49,7 +60,45 @@ public class AppTests {
         user.setEmail("test@mail.ru");
         user.setFirstName("FirstName");
         user.setLastName("LastName");
-
         user = userRepository.save(user);
     }
+
+    @Test
+    public void testOrders() throws Exception
+    {
+        User user = new User();
+        user.setEmail("test@mail.ru");
+        user.setFirstName("FirstName");
+        user.setLastName("LastName");
+        userRepository.save(user);
+
+        Order order = new Order();
+        order.setNote("blah blah blah");
+        order.setUser(user);
+
+        RestaurantTable table = new RestaurantTable();
+        table.setPersonsNum(2);
+        //tableRepository.save(table);
+        order.addTable(table);
+
+        table = new RestaurantTable();
+        table.setPersonsNum(4);
+        //tableRepository.save(table);
+        order.addTable(table);
+
+        table = new RestaurantTable();
+        table.setPersonsNum(6);
+        //tableRepository.save(table);
+        order.addTable(table);
+
+        orderRepository.save(order);
+
+        order = new Order();
+        order.setNote("test 2");
+        order.setUser(user);
+        orderRepository.save(order);
+
+        System.out.println("dasdas");
+    }
+
 }

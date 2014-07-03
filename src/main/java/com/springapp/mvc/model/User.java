@@ -1,11 +1,14 @@
 package com.springapp.mvc.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Nik on 03.07.2014.
  */
-@Entity(name = "account")
+@Entity
+@Table(name = "users")
 public class User
 {
     @Id
@@ -20,6 +23,11 @@ public class User
 
     @Basic
     private String email;
+
+
+    //@OneToMany(fetch = FetchType.EAGER,mappedBy = "user") - без этой фигни lazy load сваливается
+    @OneToMany(mappedBy = "user")
+    private Set<Order> orders = new HashSet<Order>();
 
     public Long getId()
     {
@@ -53,5 +61,9 @@ public class User
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
     }
 }
