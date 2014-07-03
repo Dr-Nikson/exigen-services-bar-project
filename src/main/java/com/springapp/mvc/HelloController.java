@@ -39,7 +39,7 @@ public class HelloController
     @RequestMapping(value = "/",method = RequestMethod.GET)
 	public String printWelcome(ModelMap model) {
         int a =0;
-		model.addAttribute("message", "Hello world! Test push");
+		model.addAttribute("message", "Hello world! Test push dsads");
         a = 1;
 		return "hello";
 	}
