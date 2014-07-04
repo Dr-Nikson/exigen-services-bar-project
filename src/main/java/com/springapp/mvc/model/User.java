@@ -9,8 +9,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "users")
-public class User
-{
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -24,18 +23,21 @@ public class User
     @Basic
     private String email;
 
+    @Basic
+    private String phone;
+
+    @Basic
+    private String password;
 
     //@OneToMany(fetch = FetchType.EAGER,mappedBy = "user") - без этой фигни lazy load сваливается
     @OneToMany(mappedBy = "user")
     private Set<Order> orders = new HashSet<Order>();
 
-    public Long getId()
-    {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Long id)
-    {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -61,6 +63,22 @@ public class User
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Set<Order> getOrders() {

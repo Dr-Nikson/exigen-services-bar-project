@@ -57,9 +57,6 @@
             <scope>test</scope>
         </dependency>
 
-
-
-
         <dependency>
             <groupId>jstl</groupId>
             <artifactId>jstl</artifactId>
@@ -101,9 +98,6 @@
             <artifactId>json</artifactId>
             <version>20080701</version>
         </dependency>
-
-
-
     </dependencies>
 
     <build>
