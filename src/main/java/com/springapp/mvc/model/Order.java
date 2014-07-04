@@ -1,7 +1,7 @@
 package com.springapp.mvc.model;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,6 +17,8 @@ public class Order {
 
     @Column(columnDefinition = "TEXT")
     private String note;
+
+
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -34,7 +36,7 @@ public class Order {
     @Basic
     private String status;
 
-    @Column(columnDefinition = "DATETIME")
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date startTime;
 
@@ -100,14 +102,6 @@ public class Order {
         this.status = status;
     }
 
-    public Date getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
     public void addTable(RestaurantTable table) {
         this.tables.add(table);
     }
@@ -115,5 +109,13 @@ public class Order {
 
     public Set<RestaurantTable> getReservedTables() {
         return this.tables;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 }
