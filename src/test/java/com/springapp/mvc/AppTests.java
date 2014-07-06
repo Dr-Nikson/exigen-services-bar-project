@@ -24,7 +24,8 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration("file:src/main/webapp/WEB-INF/mvc-dispatcher-servlet.xml")
-public class AppTests {
+public class AppTests
+{
     private MockMvc mockMvc;
 
     @SuppressWarnings("SpringJavaAutowiringInspection")
@@ -42,12 +43,14 @@ public class AppTests {
 
 
     @Before
-    public void setup() {
+    public void setup()
+    {
         this.mockMvc = webAppContextSetup(this.wac).build();
     }
 
     @Test
-    public void simple() throws Exception {
+    public void simple() throws Exception
+    {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("hello"));
@@ -79,17 +82,17 @@ public class AppTests {
         RestaurantTable table = new RestaurantTable();
         table.setPersonsNum(2);
         //tableRepository.save(table);
-        order.addTable(table);
+        order.getTables().add(table);
 
         table = new RestaurantTable();
         table.setPersonsNum(4);
         //tableRepository.save(table);
-        order.addTable(table);
+        order.getTables().add(table);
 
         table = new RestaurantTable();
         table.setPersonsNum(6);
         //tableRepository.save(table);
-        order.addTable(table);
+        order.getTables().add(table);
 
         orderRepository.save(order);
 
