@@ -27,7 +27,7 @@ public class Order
     private Boolean allRestaurant;
 
     @Basic
-    private Short personsNum;
+    private Integer personsNum;
 
     @Basic
     private Boolean ownAlcohol;
@@ -84,12 +84,12 @@ public class Order
         this.allRestaurant = allRestaurant;
     }
 
-    public Short getPersonsNum()
+    public Integer getPersonsNum()
     {
         return personsNum;
     }
 
-    public void setPersonsNum(Short personsNum)
+    public void setPersonsNum(Integer personsNum)
     {
         this.personsNum = personsNum;
     }
