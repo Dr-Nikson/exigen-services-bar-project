@@ -28,4 +28,8 @@
 
     <mvc:annotation-driven/>
 
+    <!--<bean id="personRepository" class="com.springapp.mvc.DAO.UserDAO">
+        <constructor-arg ref="entityManagerFactory" />
+    </bean>-->
+
 </beans>

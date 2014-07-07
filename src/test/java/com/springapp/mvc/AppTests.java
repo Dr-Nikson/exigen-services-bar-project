@@ -1,5 +1,6 @@
 package com.springapp.mvc;
 
+import com.springapp.mvc.DAO.UserDAO;
 import com.springapp.mvc.model.Order;
 import com.springapp.mvc.model.RestaurantTable;
 import com.springapp.mvc.model.User;
@@ -24,7 +25,8 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration("file:src/main/webapp/WEB-INF/mvc-dispatcher-servlet.xml")
-public class AppTests {
+public class AppTests
+{
     private MockMvc mockMvc;
 
     @SuppressWarnings("SpringJavaAutowiringInspection")
@@ -40,21 +42,34 @@ public class AppTests {
     @Autowired
     private RestaurantTableRepository tableRepository;
 
+    @Autowired
+    private UserDAO userDAO;
+
 
     @Before
-    public void setup() {
+    public void setup()
+    {
         this.mockMvc = webAppContextSetup(this.wac).build();
     }
 
     @Test
-    public void simple() throws Exception {
+    public void simple() throws Exception
+    {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("hello"));
     }
 
     @Test
-    public void testAddUser() throws Exception {
+    public void testDAO() throws Exception
+    {
+        //userDAO.testMePLZ();
+        System.out.println("Hello, bitch");
+    }
+
+    @Test
+    public void testAddUser() throws Exception
+    {
         User user = new User();
         user.setEmail("test@mail.ru");
         user.setFirstName("FirstName");
@@ -63,7 +78,8 @@ public class AppTests {
     }
 
     @Test
-    public void testOrders() throws Exception {
+    public void testOrders() throws Exception
+    {
         User user = new User();
         user.setEmail("test@mail.ru");
         user.setFirstName("FirstName");
@@ -100,7 +116,8 @@ public class AppTests {
     }
 
     @Test
-    public void testDB() throws Exception {
+    public void testDB() throws Exception
+    {
         User userBarney = new User();
         userBarney.setFirstName("Barney");
         userBarney.setLastName("Stinson");
@@ -159,5 +176,6 @@ public class AppTests {
 
         System.out.println("ok");
     }
+
 
 }

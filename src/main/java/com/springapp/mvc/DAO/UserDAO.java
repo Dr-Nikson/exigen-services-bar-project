@@ -2,38 +2,86 @@ package com.springapp.mvc.DAO;
 
 import com.springapp.mvc.model.User;
 import com.springapp.mvc.repository.UserRepository;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.Example;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
-public class UserDAO{
+@Service
+@Transactional
+public class UserDAO
+{
     @Autowired
     private UserRepository userRepository;
 
-    public UserDAO() {
-    }
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    public List<User> getAllUser(){
+    //@PersistenceContext
+    //private SessionFactory sessionFactory;
+
+
+    /*public void testMePLZ()
+    {
+
+        User user = new User();
+        user.setFirstName("FirstName");
+
+        Criteria criteria = getCriteria();
+        Object o = criteria.add(Example.create(user).excludeZeroes()).list();
+    }*/
+
+
+    public List<User> get()
+    {
         return userRepository.findAll();
     }
 
-    public User getByNameAndPass(String name, String pass){
-        List<User> userList;
-
+    public User get(String login, String pass)
+    {
+        Criteria criteria = this.getCriteria();
+        User user = new User();
+        user.setEmail(login);
+        user.setPassword(pass);
+        criteria.add(Example.create(user).excludeZeroes());
+        return (User) criteria.uniqueResult();
     }
 
-    public User getByID(int id){
-        return userRepository.findOne(new Long(id));
+    public User get(Long id)
+    {
+        return userRepository.findOne(id);
     }
 
-    public int save(User user) {
-        userRepository.save(user);
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    public User save(User user)
+    {
+        return userRepository.save(user);
     }
 
-    public int delete(User user) {
+    public void delete(User user)
+    {
         userRepository.delete(user);
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    protected Criteria getCriteria()
+    {
+        Session session = (Session) entityManager.getDelegate();
+        // без транзакшенал будет ошибка мол сессия закрыта. Так можно исправить:
+        //session = session.getSessionFactory().openSession();
+        return session.createCriteria(User.class);
+    }
+
+    protected CriteriaQuery<User> createCriteriaQuery()
+    {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        return criteriaBuilder.createQuery(User.class);
     }
 
 }
