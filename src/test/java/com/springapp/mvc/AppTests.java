@@ -17,6 +17,10 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -61,120 +65,118 @@ public class AppTests
     }
 
     @Test
-    public void testDAO() throws Exception
+    public void fillDB() throws Exception
     {
-        //userDAO.testMePLZ();
-        System.out.println("Hello, bitch");
-    }
+        clearDB();
 
-    @Test
-    public void testAddUser() throws Exception
-    {
-        User user = new User();
-        user.setEmail("test@mail.ru");
-        user.setFirstName("FirstName");
-        user.setLastName("LastName");
-        user = userRepository.save(user);
-    }
-
-    @Test
-    public void testOrders() throws Exception
-    {
-        User user = new User();
-        user.setEmail("test@mail.ru");
-        user.setFirstName("FirstName");
-        user.setLastName("LastName");
-        user = userRepository.save(user);
-
-        Order order = new Order();
-        order.setNote("blah blah blah");
-        order.setUser(user);
-
-        RestaurantTable table = new RestaurantTable();
-        table.setPersonsNum(2);
-        //tableRepository.save(table);
-        order.getTables().add(table);
-
-        table = new RestaurantTable();
-        table.setPersonsNum(4);
-        //tableRepository.save(table);
-        order.getTables().add(table);
-
-        table = new RestaurantTable();
-        table.setPersonsNum(6);
-        //tableRepository.save(table);
-        order.getTables().add(table);
-
-        orderRepository.save(order);
-
-        order = new Order();
-        order.setNote("test 2");
-        order.setUser(user);
-        orderRepository.save(order);
-
-        System.out.println("dasdas");
-    }
-
-    @Test
-    public void testDB() throws Exception
-    {
         User userBarney = new User();
         userBarney.setFirstName("Barney");
         userBarney.setLastName("Stinson");
         userBarney.setEmail("stinson@g.com");
-        userBarney.setPhone("1234567890");
+        userBarney.setPassword("Qwerty");
+        userBarney.setPhone("89110051010");
 
         User userJesse = new User();
         userJesse.setFirstName("Jesse");
         userJesse.setLastName("Pinkman");
         userJesse.setEmail("jpinkman@j.com");
-        userJesse.setPhone("4321");
+        userJesse.setPassword("123ghjsdl");
+        userJesse.setPhone("89062340132");
+
+        User userEve = new User();
+        userEve.setFirstName("Eve");
+        userEve.setLastName("Hereve");
+        userEve.setEmail("e.hereve@gmail.com");
+        userEve.setPassword("132");
+        userEve.setPhone("88001201920");
 
         userRepository.save(userBarney);
         userRepository.save(userJesse);
+        userRepository.save(userEve);
+
+        RestaurantTable table1 = new RestaurantTable();
+        table1.setPersonsNum(2);
+        tableRepository.save(table1);
+
+        RestaurantTable table2 = new RestaurantTable();
+        table2.setPersonsNum(2);
+        tableRepository.save(table2);
+
+        RestaurantTable table3 = new RestaurantTable();
+        table3.setPersonsNum(2);
+        tableRepository.save(table3);
+
+        RestaurantTable table4 = new RestaurantTable();
+        table4.setPersonsNum(4);
+        tableRepository.save(table4);
+
+        RestaurantTable table5 = new RestaurantTable();
+        table5.setPersonsNum(4);
+        tableRepository.save(table5);
+
+        RestaurantTable table6 = new RestaurantTable();
+        table6.setPersonsNum(4);
+        tableRepository.save(table6);
 
         Order order1Barney = new Order();
         order1Barney.setAllRestaurant(true);
-        order1Barney.setStartTime(new java.util.Date(2014 - 1900, 6, 7, 12, 0, 0));
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+        Date date = formatter.parse("2014-07-08 18:00:44.0");
+        order1Barney.setStartTime(date);
         order1Barney.setOwnAlcohol(false);
         order1Barney.setNote("Oh, please...");
-        order1Barney.setStatus("Ok!");
+        order1Barney.setStatus("New");
         order1Barney.setUser(userBarney);
+        order1Barney.setPersonsNum(18);
+
+        for (RestaurantTable table : tableRepository.findAll())
+        {
+            order1Barney.getTables().add(table);
+        }
+
+        /*order1Barney.getTables().add(table1);
+        order1Barney.getTables().add(table2);
+        order1Barney.getTables().add(table3);*/
 
         Order order2Barney = new Order();
         order2Barney.setAllRestaurant(false);
-        order2Barney.setStartTime(new java.util.Date(2014 - 1900, 6, 9, 14, 0, 0));
-        order2Barney.setOwnAlcohol(true);
+        DateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+        Date date2 = formatter.parse("2014-07-09 15:00:44.0");
+        order2Barney.setStartTime(date2);
+        order2Barney.setOwnAlcohol(false);
         order2Barney.setNote("Oh, please...");
-        order2Barney.setStatus("Ok!");
-        order2Barney.setPersonsNum(9);
+        order2Barney.setStatus("New");
+        order2Barney.setPersonsNum(8);
         order2Barney.setUser(userBarney);
+        order2Barney.getTables().add(table4);
+        order2Barney.getTables().add(table5);
+
 
         Order orderJesse = new Order();
         orderJesse.setAllRestaurant(false);
-        orderJesse.setStartTime(new java.util.Date(2014 - 1900, 6, 8, 17, 30, 0));
-        orderJesse.setOwnAlcohol(true);
+        DateFormat formatter3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+        Date date3 = formatter.parse("2014-07-09 13:00:44.0");
+        orderJesse.setStartTime(date3);
+        orderJesse.setOwnAlcohol(false);
         orderJesse.setNote("Fine!");
-        orderJesse.setStatus("ok");
+        orderJesse.setStatus("New");
         orderJesse.setPersonsNum(3);
         orderJesse.setUser(userJesse);
+        orderJesse.getTables().add(table1);
+        orderJesse.getTables().add(table2);
 
-        RestaurantTable table1 = new RestaurantTable();
-        table1.setPersonsNum(order1Barney.getPersonsNum());
-        order1Barney.getTables().add(table1);
         orderRepository.save(order1Barney);
-
-        RestaurantTable table2 = new RestaurantTable();
-        table2.setPersonsNum(order2Barney.getPersonsNum());
-        order1Barney.getTables().add(table2);
         orderRepository.save(order2Barney);
-
-        RestaurantTable table3 = new RestaurantTable();
-        table3.setPersonsNum(orderJesse.getPersonsNum());
-        orderJesse.getTables().add(table3);
         orderRepository.save(orderJesse);
 
         System.out.println("ok");
+    }
+
+    protected void clearDB()
+    {
+        orderRepository.deleteAll();
+        userRepository.deleteAll();
+        tableRepository.deleteAll();
     }
 
 

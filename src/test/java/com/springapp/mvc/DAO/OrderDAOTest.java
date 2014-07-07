@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -19,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration("file:src/main/webapp/WEB-INF/mvc-dispatcher-servlet.xml")
-@Transactional
+//@Transactional
 public class OrderDAOTest
 {
     @Autowired
@@ -29,17 +28,17 @@ public class OrderDAOTest
     public void testGetOrders() throws Exception
     {
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
-        Date date = formatter.parse("2014-07-08 18:00:44.0");
+        Date date = formatter.parse("2014-07-09 18:00:44.0");
         List<Order> orders = orderDAO.getOrders(date);
-        assertEquals(orders.size(), 3);
+        assertEquals(2, orders.size());
     }
 
     @Test
     public void testGetReservedSpace() throws Exception
     {
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
-        Date date = formatter.parse("2014-07-08 18:00:44.0");
+        Date date = formatter.parse("2014-07-09 18:00:44.0");
         Long reservedSpace = orderDAO.getReservedSpace(date);
-        assertEquals((long) reservedSpace, (long) 3);
+        assertEquals((long) 12, (long) reservedSpace);
     }
 }

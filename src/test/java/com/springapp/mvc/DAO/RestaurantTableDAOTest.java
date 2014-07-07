@@ -23,6 +23,6 @@ public class RestaurantTableDAOTest
     public void testGetAvailableSpace() throws Exception
     {
         Long availableSpace = restaurantTableDAO.getAvailableSpace();
-        assertEquals((long) availableSpace, (long) 43);
+        assertEquals((long) availableSpace, (long) 18);
     }
 }

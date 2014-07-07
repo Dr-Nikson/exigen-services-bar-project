@@ -38,7 +38,7 @@ public class Order
     @Temporal(TemporalType.TIMESTAMP)
     private Date startTime;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name = "reserved_tables",
             joinColumns = {@JoinColumn(name = "order_id")},
             inverseJoinColumns = {@JoinColumn(name = "restaurant_table_id")})

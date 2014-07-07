@@ -52,6 +52,7 @@ public class OrderDAO
          */
         Criteria criteria = this.getCriteria();
         criteria.add(Restrictions.between("startTime", loDate, hiDate));
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY); // Я НЕ ЗНАЮ ПОЧЕМУ БЕЗ ЭТОГО НЕ РАБОТАЕТ, НО ЕСЛИ ЗАКОМЕНТИТЬ - НА ВЫХОДЕ БУДУТ ДУПЛИКАТЫ ОРДЕРОВ
         return criteria.list();
     }
 
@@ -71,9 +72,22 @@ public class OrderDAO
         return reservedSpace;
     }
 
+    public Order save(Order order)
+    {
+        order = orderRepository.save(order);
+        //getSession().getTransaction().commit();
+        //entityManager.flush();
+        return order;
+    }
+
+    protected Session getSession()
+    {
+        return (Session) entityManager.getDelegate();
+    }
+
     protected Criteria getCriteria()
     {
-        Session session = (Session) entityManager.getDelegate();
+        Session session = getSession();
         // без транзакшенал будет ошибка мол сессия закрыта. Так можно исправить:
         //session = session.getSessionFactory().openSession();
         return session.createCriteria(Order.class);
