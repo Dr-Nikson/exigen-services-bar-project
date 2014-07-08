@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,7 +26,6 @@ public class UsersController {
     @Autowired
     private UserService userService;
 
-    @Autowired
     private ResponseService responseService;
 
     @Autowired
@@ -42,9 +42,12 @@ public class UsersController {
     JSONResponse getUsersList()
     {
         ResponseService responseService = new ResponseServiceImpl();
-        //Long id = new Long(1);
-        //return userRepository.findAll();
-        return responseService.successResponse(userRepository.findAll());
+        try{
+            authorizationService.checkAccess(UserRoles.ADMIN);
+        }catch(AuthorizationException ex){
+            responseService.errorResponse("authtorization.access_denied","error");
+        }
+        return responseService.successResponse(userService.getUsers());
     }
 
 
