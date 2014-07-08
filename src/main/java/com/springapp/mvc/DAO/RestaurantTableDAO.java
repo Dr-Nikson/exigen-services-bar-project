@@ -43,7 +43,7 @@ public class RestaurantTableDAO
                 break;
         }
 
-        return new Pair<Integer, List<RestaurantTable>>(personsNum, result);
+        return new Pair<Integer, List<RestaurantTable>>(reservedForPersons, result);
     }
 
     public List<RestaurantTable> getTablesExcludeList(List<RestaurantTable> excluded)

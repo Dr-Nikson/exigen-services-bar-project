@@ -3,6 +3,9 @@ package com.springapp.mvc.service;
 import com.springapp.mvc.DAO.UserDAO;
 import com.springapp.mvc.exceptions.AuthorizationException;
 import com.springapp.mvc.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -11,7 +14,12 @@ import javax.servlet.http.HttpSession;
 /**
  * Created by TofixXx on 07.07.2014.
  */
+@Service
+@Transactional
 public class AuthorizationServiceImpl implements AuthorizationService {
+
+    @Autowired
+    private UserDAO userDao;
     /**
      * Метод авторизует пользователя:
      * 1) Сохраняет ключ авторизации в http-сессии
@@ -21,17 +29,21 @@ public class AuthorizationServiceImpl implements AuthorizationService {
      * @return возвращает авторизованного пользователя
      * @throws AuthorizationException в случае неудачи
      */
+
     HttpSession session;
     HttpServletResponse response;
+
+
     public AuthorizationServiceImpl(HttpSession session, HttpServletResponse response)
     {
         this.session = session;
         this.response = response;
     }
+
+    @Override
     public User authorizeUser(User user) throws AuthorizationException
     {
-        UserDAO userDAO = new UserDAO();
-        User authorizedUser = userDAO.get(user.getEmail(), user.getPassword());
+        User authorizedUser = userDao.get(user.getEmail(), user.getPassword());
         if(authorizedUser != null)
         {
             session.setAttribute("user", user);
@@ -52,6 +64,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
      * @return true, если права у пользователя есть
      * @throws AuthorizationException если пользователь не авторизован
      */
+    @Override
     public boolean checkAccess(UserRoles role) throws AuthorizationException
     {
             UserRoles UserRole = (UserRoles)session.getAttribute("role");

@@ -3,6 +3,9 @@ package com.springapp.mvc.service;
 import com.springapp.mvc.DAO.UserDAO;
 import com.springapp.mvc.exceptions.UserException;
 import com.springapp.mvc.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -12,8 +15,14 @@ import java.util.List;
 /**
  * Created by Nik on 06.07.2014.
  */
+@Service
+@Transactional
 public class UserServiceImpl implements UserService
 {
+    @Autowired
+    private UserDAO userDao;
+
+
     private String Hash(String password)
     {
         MessageDigest md;
@@ -40,14 +49,13 @@ public class UserServiceImpl implements UserService
      * @param user содержит данные о пользователе (без id)
      * @return Новый пользователь
      */
-
+    @Override
     public User registerUser(User user)
     {
         String password = user.getPassword();
         user.setPassword(Hash(password));
 
-        UserDAO userDAO = new UserDAO();
-        User savedUser = userDAO.save(user);
+        User savedUser = userDao.save(user);
         return savedUser;
 
     }
@@ -61,6 +69,7 @@ public class UserServiceImpl implements UserService
      * @return пользователь с заданными логином\паролем
      * @throws UserException если не удалось залогинить
      */
+    @Override
     public User loginUser(String login, String password) throws UserException
     {
         String hashedPassword = Hash(password);
@@ -79,8 +88,9 @@ public class UserServiceImpl implements UserService
      *
      * @return список пользователей
      */
+    @Override
     public List<User> getUsers()
     {
-        return (new UserDAO()).get();
+        return userDao.get();
     }
 }
