@@ -1,6 +1,7 @@
 package com.springapp.mvc.controllers;
 
 import com.springapp.mvc.exceptions.AuthorizationException;
+import com.springapp.mvc.exceptions.OrderException;
 import com.springapp.mvc.exceptions.UserException;
 import com.springapp.mvc.json_protocol.JSONResponse;
 import com.springapp.mvc.model.User;
@@ -77,8 +78,7 @@ public class UsersController {
     @RequestMapping(value = "/api/orders/get", method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONResponse getOrdersJson(HttpServletRequest request)
-    {
+    JSONResponse getOrdersJson(HttpServletRequest request) throws OrderException {
         HttpSession session = request.getSession();
         authorizationService = new AuthorizationServiceImpl();
         responseService = new ResponseServiceImpl();
