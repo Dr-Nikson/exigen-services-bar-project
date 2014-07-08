@@ -3,6 +3,9 @@ package com.springapp.mvc.service;
 import com.springapp.mvc.exceptions.AuthorizationException;
 import com.springapp.mvc.model.User;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 /**
  * Created by Nik on 06.07.2014.
  */
@@ -17,7 +20,7 @@ public interface AuthorizationService
      * @return возвращает авторизованного пользователя
      * @throws AuthorizationException в случае неудачи
      */
-    public User authorizeUser(User user) throws AuthorizationException;
+    public User authorizeUser(User user, HttpSession session, HttpServletResponse response) throws AuthorizationException;
 
     /**
      * Метод проверяет права авторизованного пользователя
@@ -26,5 +29,5 @@ public interface AuthorizationService
      * @return true, если права у пользователя есть
      * @throws AuthorizationException если пользователь не авторизован
      */
-    public boolean checkAccess(UserRoles role) throws AuthorizationException;
+    public boolean checkAccess(UserRoles role, HttpSession session) throws AuthorizationException;
 }

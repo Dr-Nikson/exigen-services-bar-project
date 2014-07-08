@@ -1,8 +1,10 @@
-package com.springapp.mvc.service;
+package com.springapp.mvc.service.Impl;
 
 import com.springapp.mvc.DAO.UserDAO;
 import com.springapp.mvc.exceptions.AuthorizationException;
 import com.springapp.mvc.model.User;
+import com.springapp.mvc.service.AuthorizationService;
+import com.springapp.mvc.service.UserRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,16 +36,12 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     HttpServletResponse response;
 
 
-    public AuthorizationServiceImpl(HttpSession session, HttpServletResponse response)
-    {
-        this.session = session;
-        this.response = response;
-    }
-
     @Override
-    public User authorizeUser(User user) throws AuthorizationException
+    public User authorizeUser(User user, HttpSession session, HttpServletResponse response) throws AuthorizationException
     {
         User authorizedUser = userDao.get(user.getEmail(), user.getPassword());
+        this.session = session;
+        this.response = response;
         if(authorizedUser != null)
         {
             session.setAttribute("user", user);
@@ -65,7 +63,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
      * @throws AuthorizationException если пользователь не авторизован
      */
     @Override
-    public boolean checkAccess(UserRoles role) throws AuthorizationException
+    public boolean checkAccess(UserRoles role, HttpSession session) throws AuthorizationException
     {
             UserRoles UserRole = (UserRoles)session.getAttribute("role");
             if(UserRole == role)

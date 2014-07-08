@@ -1,8 +1,9 @@
-package com.springapp.mvc.service;
+package com.springapp.mvc.service.Impl;
 
 import com.springapp.mvc.json_protocol.JSONErrorResponse;
 import com.springapp.mvc.json_protocol.JSONResponse;
 import com.springapp.mvc.json_protocol.JSONSuccessResponse;
+import com.springapp.mvc.service.ResponseService;
 
 
 /**

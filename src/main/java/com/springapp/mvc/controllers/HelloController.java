@@ -1,17 +1,12 @@
 package com.springapp.mvc.controllers;
 
-import com.springapp.mvc.exceptions.AuthorizationException;
-import com.springapp.mvc.json_protocol.JSONErrorResponse;
 import com.springapp.mvc.json_protocol.JSONResponse;
-import com.springapp.mvc.json_protocol.JSONSuccessResponse;
 import com.springapp.mvc.model.Order;
 import com.springapp.mvc.model.User;
 import com.springapp.mvc.repository.OrderRepository;
 import com.springapp.mvc.repository.UserRepository;
-import com.springapp.mvc.service.AuthorizationService;
-import com.springapp.mvc.service.AuthorizationServiceImpl;
 import com.springapp.mvc.service.ResponseService;
-import com.springapp.mvc.service.ResponseServiceImpl;
+import com.springapp.mvc.service.Impl.ResponseServiceImpl;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
@@ -96,21 +89,5 @@ public class HelloController
 		return "hello";
 	}
 
-    @RequestMapping(value = "/api/users/authorize", method = RequestMethod.POST)
-    public
-    @ResponseBody
-    JSONResponse authorizeUserJson(@RequestBody User user, HttpServletRequest request, HttpServletResponse response)
-    {
-        AuthorizationService authorizationService = new AuthorizationServiceImpl(request.getSession(), response);
-        try
-        {
-            authorizationService.authorizeUser(user);
-        }
-        catch(AuthorizationException ex)
-        {
-            return new JSONErrorResponse("autherization.failed", new String());
-        }
-        return new JSONSuccessResponse(user);
 
-    }
 }

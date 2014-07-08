@@ -1,17 +1,23 @@
 package com.springapp.mvc.controllers;
 
+import com.springapp.mvc.exceptions.AuthorizationException;
 import com.springapp.mvc.exceptions.UserException;
 import com.springapp.mvc.json_protocol.JSONResponse;
 import com.springapp.mvc.model.User;
-import com.springapp.mvc.repository.UserRepository;
-import com.springapp.mvc.service.ResponseService;
-import com.springapp.mvc.service.ResponseServiceImpl;
-import com.springapp.mvc.service.UserService;
+import com.springapp.mvc.service.*;
+import com.springapp.mvc.service.Impl.AuthorizationServiceImpl;
+import com.springapp.mvc.service.Impl.OrderServiceImpl;
+import com.springapp.mvc.service.Impl.ResponseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.naming.AuthenticationException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Created by Vlad on 08.07.2014.
@@ -21,31 +27,75 @@ public class UsersController {
     @Autowired
     private UserService userService;
 
+    private ResponseService responseService;
+
+    @Autowired
+    private AuthorizationService authorizationService;
+
+    @Autowired
+    private OrderService orderService;
+
+
+
     @RequestMapping(value = "/api/users/get", method = RequestMethod.GET)
     public
     @ResponseBody
     JSONResponse getUsersList()
     {
         ResponseService responseService = new ResponseServiceImpl();
-        //Long id = new Long(1);
-        //return userRepository.findAll();
-        return responseService.successResponse(userRepository.findAll());
+        try{
+            authorizationService.checkAccess(UserRoles.ADMIN);
+        }catch(AuthorizationException ex){
+            responseService.errorResponse("authtorization.access_denied","error");
+        }
+        return responseService.successResponse(userService.getUsers());
     }
 
 
     @RequestMapping(value = "/api/users/authorize", method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONResponse authorizationUserJson(@RequestBody User user){
+    JSONResponse authorizationUserJson(@RequestBody User user, HttpServletRequest request, HttpServletResponse response){
         User loginedUser =null;
-        ResponseService responseService = new ResponseServiceImpl();
+        User authorizedUser =null;
+        responseService = new ResponseServiceImpl();
+        authorizationService = new AuthorizationServiceImpl();
+
         try
         {
             loginedUser = userService.loginUser(user.getEmail(), user.getPassword());
+            authorizedUser = authorizationService.authorizeUser(loginedUser, request.getSession(), response);
         }catch(UserException ex)
         {
             responseService.errorResponse("authtorization.failed","error");
         }
-        return responseService.successResponse(loginedUser);
+        catch(AuthorizationException ex)
+        {
+            responseService.errorResponse("authtorization.failed","error");
+        }
+
+        return responseService.successResponse(authorizedUser);
+    }
+
+    @RequestMapping(value = "/api/orders/get", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONResponse getOrdersJson(HttpServletRequest request)
+    {
+        HttpSession session = request.getSession();
+        authorizationService = new AuthorizationServiceImpl();
+        responseService = new ResponseServiceImpl();
+        orderService = new OrderServiceImpl();
+
+        try
+        {
+            authorizationService.checkAccess(UserRoles.USER, session);
+        }
+        catch(AuthorizationException ex)
+        {
+            return responseService.errorResponse("authorization.access_denied", new String());
+        }
+        return responseService.successResponse(orderService.getOrders());
+
     }
 }
