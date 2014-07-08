@@ -4,11 +4,13 @@ import com.springapp.mvc.json_protocol.JSONErrorResponse;
 import com.springapp.mvc.json_protocol.JSONResponse;
 import com.springapp.mvc.json_protocol.JSONSuccessResponse;
 import com.springapp.mvc.service.ResponseService;
+import org.springframework.stereotype.Service;
 
 
 /**
  * Created by Nik on 06.07.2014.
  */
+@Service
 public class ResponseServiceImpl implements ResponseService
 {
 

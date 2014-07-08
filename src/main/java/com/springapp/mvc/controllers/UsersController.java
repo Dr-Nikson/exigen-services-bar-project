@@ -44,7 +44,7 @@ public class UsersController {
     {
         ResponseService responseService = new ResponseServiceImpl();
         try{
-            authorizationService.checkAccess(UserRoles.ADMIN,request.getSession());
+            authorizationService.checkAccess(UserRoles.ADMIN);
         }catch(AuthorizationException ex){
             responseService.errorResponse("authtorization.access_denied","error");
         }
