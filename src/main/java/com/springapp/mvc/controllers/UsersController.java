@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class UsersController {
 
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private UserService userService;
 
     @RequestMapping(value = "/api/users/get", method = RequestMethod.GET)
