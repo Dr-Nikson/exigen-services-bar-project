@@ -7,7 +7,7 @@ import com.springapp.mvc.exceptions.UserException;
 import com.springapp.mvc.model.Order;
 import com.springapp.mvc.model.RestaurantTable;
 import com.springapp.mvc.model.User;
-import javafx.util.Pair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

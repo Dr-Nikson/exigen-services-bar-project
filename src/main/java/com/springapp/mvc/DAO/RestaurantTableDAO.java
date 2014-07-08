@@ -2,7 +2,8 @@ package com.springapp.mvc.DAO;
 
 import com.springapp.mvc.model.RestaurantTable;
 import com.springapp.mvc.repository.OrderRepository;
-import javafx.util.Pair;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -43,7 +44,7 @@ public class RestaurantTableDAO
                 break;
         }
 
-        return new Pair<Integer, List<RestaurantTable>>(reservedForPersons, result);
+        return new ImmutablePair<Integer, List<RestaurantTable>>(reservedForPersons, result);
     }
 
     public List<RestaurantTable> getTablesExcludeList(List<RestaurantTable> excluded)
