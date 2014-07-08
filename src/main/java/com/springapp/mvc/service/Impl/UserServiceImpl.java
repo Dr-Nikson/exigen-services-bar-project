@@ -1,8 +1,9 @@
-package com.springapp.mvc.service;
+package com.springapp.mvc.service.Impl;
 
 import com.springapp.mvc.DAO.UserDAO;
 import com.springapp.mvc.exceptions.UserException;
 import com.springapp.mvc.model.User;
+import com.springapp.mvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
