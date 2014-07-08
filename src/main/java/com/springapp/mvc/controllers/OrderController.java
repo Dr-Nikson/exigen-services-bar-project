@@ -7,7 +7,7 @@ import com.springapp.mvc.model.User;
 import com.springapp.mvc.model.Order;
 import com.springapp.mvc.service.OrderService;
 import com.springapp.mvc.service.ResponseService;
-import com.springapp.mvc.service.ResponseServiceImpl;
+import com.springapp.mvc.service.Impl.ResponseServiceImpl;
 import com.springapp.mvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,5 +40,19 @@ public class OrderController {
         return responseService.successResponse(orderService.getOrders());
     }
 
+    @RequestMapping(value = "/api/orders/check", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONResponse checkOrderAvailabilityJson(Order order)
+    {
+        ResponseService responseService = new ResponseServiceImpl();
+        try {
+            orderService.checkOrderAvailability(order);
+        }catch (OrderException ex)
+        {
+            responseService.errorResponse("order.not_enough_space",order.getTables());
+        }
+        return responseService.successResponse(order);
+    }
 
 }
