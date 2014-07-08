@@ -1,7 +1,5 @@
 package com.springapp.mvc.model;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,8 +9,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "users")
-public class User
-{
+public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -33,7 +30,7 @@ public class User
     private String password;
 
     //@OneToMany(fetch = FetchType.EAGER,mappedBy = "user") - без этой фигни lazy load сваливается
-    @JsonIgnore
+   // @JsonIgnore
     @OneToMany(mappedBy = "user")
     private Set<Order> orders = new HashSet<Order>();
 
