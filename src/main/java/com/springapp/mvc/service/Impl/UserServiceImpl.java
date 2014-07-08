@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService
     public User loginUser(String login, String password) throws UserException
     {
         String hashedPassword = Hash(password);
-        User user = (new UserDAO()).get(login, hashedPassword);
+        User user = userDao.get(login, hashedPassword);
         if(user == null)
         {
             throw new UserException();
