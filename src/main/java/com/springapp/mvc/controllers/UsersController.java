@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Created by Vlad on 08.07.2014.
@@ -51,34 +52,45 @@ public class UsersController {
     @RequestMapping(value = "/api/users/authorize", method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONResponse authorizationUserJson(@RequestBody User user){
+    JSONResponse authorizationUserJson(@RequestBody User user, HttpServletRequest request, HttpServletResponse response){
         User loginedUser =null;
+        User authorizedUser =null;
         responseService = new ResponseServiceImpl();
+        authorizationService = new AuthorizationServiceImpl();
+
         try
         {
             loginedUser = userService.loginUser(user.getEmail(), user.getPassword());
+            authorizedUser = authorizationService.authorizeUser(loginedUser, request.getSession(), response);
         }catch(UserException ex)
         {
             responseService.errorResponse("authtorization.failed","error");
         }
-        return responseService.successResponse(loginedUser);
+        catch(AuthorizationException ex)
+        {
+            responseService.errorResponse("authtorization.failed","error");
+        }
+
+        return responseService.successResponse(authorizedUser);
     }
 
     @RequestMapping(value = "/api/orders/get", method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONResponse getOrdersJson(HttpServletRequest request, HttpServletResponse response)
+    JSONResponse getOrdersJson(HttpServletRequest request)
     {
-        authorizationService = new AuthorizationServiceImpl(request.getSession(), response);
+        HttpSession session = request.getSession();
+        authorizationService = new AuthorizationServiceImpl();
         responseService = new ResponseServiceImpl();
         orderService = new OrderServiceImpl();
+
         try
         {
-            authorizationService.checkAccess(UserRoles.USER);
+            authorizationService.checkAccess(UserRoles.USER, session);
         }
         catch(AuthorizationException ex)
         {
-            return responseService.errorResponse("autherization.access_denied", new String());
+            return responseService.errorResponse("authorization.access_denied", new String());
         }
         return responseService.successResponse(orderService.getOrders());
 
