@@ -26,7 +26,6 @@ public class UsersController {
     @Autowired
     private UserService userService;
 
-    @Autowired
     private ResponseService responseService;
 
     @Autowired
