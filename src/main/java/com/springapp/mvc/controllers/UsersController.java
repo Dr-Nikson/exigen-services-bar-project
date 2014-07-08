@@ -40,11 +40,11 @@ public class UsersController {
     @RequestMapping(value = "/api/users/get", method = RequestMethod.GET)
     public
     @ResponseBody
-    JSONResponse getUsersList()
+    JSONResponse getUsersList(@RequestBody User user, HttpServletRequest request, HttpServletResponse response)
     {
         ResponseService responseService = new ResponseServiceImpl();
         try{
-            authorizationService.checkAccess(UserRoles.ADMIN);
+            authorizationService.checkAccess(UserRoles.ADMIN,request.getSession());
         }catch(AuthorizationException ex){
             responseService.errorResponse("authtorization.access_denied","error");
         }
