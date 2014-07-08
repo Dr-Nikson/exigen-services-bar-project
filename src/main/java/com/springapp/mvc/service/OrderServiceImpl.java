@@ -19,8 +19,7 @@ import java.util.List;
 @Service
 //@Qualifier(value = "orderService")
 @Transactional
-public class OrderServiceImpl implements OrderService
-{
+public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderDAO orderDAO;
 
@@ -30,16 +29,14 @@ public class OrderServiceImpl implements OrderService
 
 
     @Override
-    public boolean checkOrderAvailability(Order order)
-    {
+    public boolean checkOrderAvailability(Order order) {
         Long reservedSpace = orderDAO.getReservedSpace(order.getStartTime());
         Long availableSpace = tableDAO.getAvailableSpace();
         return (availableSpace - reservedSpace) >= order.getPersonsNum();
     }
 
     @Override
-    public Order addOrder(Order order) throws OrderException
-    {
+    public Order addOrder(Order order) throws OrderException {
         // 1) Проверим на возможность добавления ордера
         if (!checkOrderAvailability(order))
             throw new OrderException("Недостаточно места - столы заняты!");
@@ -47,10 +44,8 @@ public class OrderServiceImpl implements OrderService
         List<Order> orders = orderDAO.getOrders(order.getStartTime());
         // 3) Получить все заказанные столы на дату из order.startTime
         List<RestaurantTable> reservedTables = new ArrayList<RestaurantTable>();
-        for (Order tmpOrder : orders)
-        {
-            for (RestaurantTable table : tmpOrder.getTables())
-            {
+        for (Order tmpOrder : orders) {
+            for (RestaurantTable table : tmpOrder.getTables()) {
                 reservedTables.add(table);
             }
         }
@@ -64,8 +59,7 @@ public class OrderServiceImpl implements OrderService
             throw new OrderException("Неудалось добавить заказ - неудалось получить достаточное количество столов (получено:"
                     + tablesForPersons.getKey() + "; необходимо:" + order.getPersonsNum());
         // 8) Добавляем столы к заказу
-        for (RestaurantTable table : tablesForPersons.getValue())
-        {
+        for (RestaurantTable table : tablesForPersons.getValue()) {
             order.getTables().add(table);
         }
         // 9) Сохраним пользователя
@@ -87,32 +81,27 @@ public class OrderServiceImpl implements OrderService
     }
 
     @Override
-    public Integer getFreeSpace(Date date)
-    {
-        return null;
+    public Integer getFreeSpace(Date date) {
+        return (int) (long) (tableDAO.getAvailableSpace() - orderDAO.getReservedSpace(date));
     }
 
     @Override
-    public List<Order> getOrders()
-    {
-        return null;
+    public List<Order> getOrders() {
+        return orderDAO.getAllOrders();
     }
 
     @Override
-    public List<Order> getOrders(User user)
-    {
-        return null;
+    public List<Order> getOrders(User user) {
+        return orderDAO.getOrders(user);
     }
 
     @Override
-    public List<Order> getOrders(Date day)
-    {
-        return null;
+    public List<Order> getOrders(Date day) {
+        return orderDAO.getOrders(day);
     }
 
     @Override
-    public List<Order> getOrders(Date startDate, Date endDate)
-    {
-        return null;
+    public List<Order> getOrders(Date startDate, Date endDate) {
+        return orderDAO.getOrders(startDate, endDate);
     }
 }

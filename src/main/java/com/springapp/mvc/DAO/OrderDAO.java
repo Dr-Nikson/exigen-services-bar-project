@@ -2,9 +2,11 @@ package com.springapp.mvc.DAO;
 
 import com.springapp.mvc.model.Order;
 import com.springapp.mvc.model.RestaurantTable;
+import com.springapp.mvc.model.User;
 import com.springapp.mvc.repository.OrderRepository;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,16 +24,14 @@ import java.util.List;
 
 @Service
 @Transactional
-public class OrderDAO
-{
+public class OrderDAO {
     @Autowired
     private OrderRepository orderRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    public List<Order> getOrders(Date byDay)
-    {
+    public List<Order> getOrders(Date byDay) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(byDay);
 
@@ -56,15 +56,28 @@ public class OrderDAO
         return criteria.list();
     }
 
+    public List<Order> getOrders(Date startDate, Date endDate) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(startDate);
+        calendar.set(Calendar.HOUR_OF_DAY, startDate.getHours());
+        calendar.set(Calendar.MINUTE, startDate.getMinutes());
+        Date loDate = new Date(calendar.getTime().getTime());
 
-    public Long getReservedSpace(Date day)
-    {
+        calendar.setTime(endDate);
+        calendar.set(Calendar.HOUR_OF_DAY, endDate.getHours());
+        calendar.set(Calendar.MINUTE, endDate.getMinutes());
+        Date hiDate = new Date(calendar.getTime().getTime());
+        Criteria criteria = this.getCriteria();
+        criteria.add(Restrictions.between("startTime", loDate, hiDate));
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        return criteria.list();
+    }
+
+    public Long getReservedSpace(Date day) {
         Long reservedSpace = (long) 0;
 
-        for (Order order : this.getOrders(day))
-        {
-            for (RestaurantTable table : order.getTables())
-            {
+        for (Order order : this.getOrders(day)) {
+            for (RestaurantTable table : order.getTables()) {
                 reservedSpace += table.getPersonsNum();
             }
         }
@@ -72,30 +85,39 @@ public class OrderDAO
         return reservedSpace;
     }
 
-    public Order save(Order order)
-    {
+    public Order save(Order order) {
         order = orderRepository.save(order);
         //getSession().getTransaction().commit();
         //entityManager.flush();
         return order;
     }
 
-    protected Session getSession()
-    {
+    protected Session getSession() {
         return (Session) entityManager.getDelegate();
     }
 
-    protected Criteria getCriteria()
-    {
+    protected Criteria getCriteria() {
         Session session = getSession();
         // без транзакшенал будет ошибка мол сессия закрыта. Так можно исправить:
         //session = session.getSessionFactory().openSession();
         return session.createCriteria(Order.class);
     }
 
-    protected CriteriaQuery<Order> createCriteriaQuery()
-    {
+    protected CriteriaQuery<Order> createCriteriaQuery() {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         return criteriaBuilder.createQuery(Order.class);
+    }
+
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll();
+    }
+
+    public List<Order> getOrders(User user) {
+        Criteria criteria = this.getCriteria();
+        Order order = new Order();
+        order.setUser(user);
+
+        criteria.add(Example.create(order).excludeZeroes());
+        return criteria.list();
     }
 }
