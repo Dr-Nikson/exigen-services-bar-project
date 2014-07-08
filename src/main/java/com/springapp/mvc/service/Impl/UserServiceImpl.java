@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService
         {
             md = MessageDigest.getInstance("MD5");
             passwordBytes = password.getBytes("UTF-8");
-            hashedPassword = md.digest().toString();
+            hashedPassword = md.digest(passwordBytes).toString();
         }
         catch(NoSuchAlgorithmException e){
             e.printStackTrace();
