@@ -42,10 +42,10 @@ public class UsersController {
     @ResponseBody
     JSONResponse getUsersList()
     {
-        ResponseService responseService = new ResponseServiceImpl();
+        //ResponseService responseService = new ResponseServiceImpl();
         //Long id = new Long(1);
         //return userRepository.findAll();
-        return responseService.successResponse(userRepository.findAll());
+        return responseService.successResponse(userService.getUsers());
     }
 
 
