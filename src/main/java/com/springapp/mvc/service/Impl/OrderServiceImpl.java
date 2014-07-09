@@ -3,7 +3,6 @@ package com.springapp.mvc.service.Impl;
 import com.springapp.mvc.DAO.OrderDAO;
 import com.springapp.mvc.DAO.RestaurantTableDAO;
 import com.springapp.mvc.exceptions.OrderException;
-import com.springapp.mvc.exceptions.UserException;
 import com.springapp.mvc.model.Order;
 import com.springapp.mvc.model.RestaurantTable;
 import com.springapp.mvc.model.User;
@@ -22,12 +21,15 @@ import java.util.List;
 //@Qualifier(value = "orderService")
 @Transactional
 public class OrderServiceImpl implements OrderService {
+
     @Autowired
     private OrderDAO orderDAO;
 
-
     @Autowired
     private RestaurantTableDAO tableDAO;
+
+    @Autowired
+    private UserService userService;
 
 
     @Override
@@ -65,17 +67,7 @@ public class OrderServiceImpl implements OrderService {
             order.getTables().add(table);
         }
         // 9) Сохраним пользователя
-
-        // TODO: Вызов userService
-        UserService userService = new UserServiceImpl();
-        try
-        {
-            userService.loginUser(order.getUser().getEmail(), order.getUser().getEmail());
-        }
-        catch (UserException ex)
-        {
-            userService.registerUser(order.getUser());
-        }
+        //UserService userService = new UserServiceImpl();
 
         // 10) Добавить заказ
         order = orderDAO.save(order);

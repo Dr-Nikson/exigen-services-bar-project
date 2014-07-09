@@ -43,13 +43,15 @@ public class UsersController {
     @ResponseBody
     JSONResponse getUsersList(HttpServletRequest request, HttpServletResponse response)
     {
-        //ResponseService responseService = new ResponseServiceImpl();
-        List<User> users = null;
-        try{
-            authorizationService.checkAccess(UserRoles.ADMIN,request.getSession());
+        List<User> users;
+        try
+        {
+            authorizationService.checkAccess(UserRoles.ADMIN, request.getSession());
             users = userService.getUsers();
-        }catch(AuthorizationException ex){
-            return responseService.errorResponse("authtorization.access_denied", "error");
+        }
+        catch (AuthorizationException ex)
+        {
+            return responseService.errorResponse("authorization.access_denied", "error");
         }
         return responseService.successResponse(users);
     }
@@ -59,22 +61,22 @@ public class UsersController {
     public
     @ResponseBody
     JSONResponse authorizationUserJson(@RequestBody User user, HttpServletRequest request, HttpServletResponse response){
-        User loginedUser =null;
-        User authorizedUser =null;
-        //responseService = new ResponseServiceImpl();
-        //authorizationService = new AuthorizationServiceImpl();
+
+        User loginedUser;
+        User authorizedUser;
 
         try
         {
             loginedUser = userService.loginUser(user.getEmail(), user.getPassword());
             authorizedUser = authorizationService.authorizeUser(loginedUser, request.getSession(), response);
-        }catch(UserException ex)
-        {
-            return responseService.errorResponse("authtorization.failed", "error");
         }
-        catch(AuthorizationException ex)
+        catch (UserException ex)
         {
-            return responseService.errorResponse("authtorization.failed", "error");
+            return responseService.errorResponse("authorization.failed", "error");
+        }
+        catch (AuthorizationException ex)
+        {
+            return responseService.errorResponse("authorization.failed", "error");
         }
 
         return responseService.successResponse(authorizedUser);

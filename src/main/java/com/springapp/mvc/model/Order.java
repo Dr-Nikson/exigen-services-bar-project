@@ -19,6 +19,7 @@ public class Order
     @Column(columnDefinition = "TEXT")
     private String note;
 
+    //@JsonDeserialize(using = User)
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
