@@ -1,7 +1,6 @@
 package com.springapp.mvc.controllers;
 
 import com.springapp.mvc.exceptions.AuthorizationException;
-import com.springapp.mvc.exceptions.OrderException;
 import com.springapp.mvc.exceptions.UserException;
 import com.springapp.mvc.json_protocol.JSONResponse;
 import com.springapp.mvc.model.User;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -27,7 +27,6 @@ public class UsersController {
     @Autowired
     private UserService userService;
 
-    @Autowired
     private ResponseService responseService;
 
     @Autowired
@@ -41,11 +40,14 @@ public class UsersController {
     @RequestMapping(value = "/api/users/get", method = RequestMethod.GET)
     public
     @ResponseBody
-    JSONResponse getUsersList()
+    JSONResponse getUsersList(@RequestBody User user, HttpServletRequest request, HttpServletResponse response)
     {
-        //ResponseService responseService = new ResponseServiceImpl();
-        //Long id = new Long(1);
-        //return userRepository.findAll();
+        ResponseService responseService = new ResponseServiceImpl();
+        try{
+            authorizationService.checkAccess(UserRoles.ADMIN,request.getSession());
+        }catch(AuthorizationException ex){
+            responseService.errorResponse("authtorization.access_denied","error");
+        }
         return responseService.successResponse(userService.getUsers());
     }
 
@@ -78,7 +80,8 @@ public class UsersController {
     @RequestMapping(value = "/api/orders/get", method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONResponse getOrdersJson(HttpServletRequest request) throws OrderException {
+    JSONResponse getOrdersJson(HttpServletRequest request)
+    {
         HttpSession session = request.getSession();
         authorizationService = new AuthorizationServiceImpl();
         responseService = new ResponseServiceImpl();
