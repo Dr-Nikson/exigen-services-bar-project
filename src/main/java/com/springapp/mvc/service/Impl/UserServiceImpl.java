@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService
     public User registerUser(User user)
     {
         String password = user.getPassword();
-        user.setPassword(Hash(password));
+        //user.setPassword(Hash(password));
 
         User savedUser = userDao.save(user);
         return savedUser;
@@ -73,7 +73,8 @@ public class UserServiceImpl implements UserService
     @Override
     public User loginUser(String login, String password) throws UserException
     {
-        String hashedPassword = Hash(password);
+        //String hashedPassword = Hash(password);
+        String hashedPassword = password;
         User user = userDao.get(login, hashedPassword);
         if(user == null)
         {

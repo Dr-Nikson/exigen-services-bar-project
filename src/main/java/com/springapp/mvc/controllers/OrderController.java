@@ -4,13 +4,13 @@ import com.springapp.mvc.exceptions.AuthorizationException;
 import com.springapp.mvc.exceptions.OrderException;
 import com.springapp.mvc.json_protocol.JSONResponse;
 import com.springapp.mvc.model.Order;
-import com.springapp.mvc.model.User;
 import com.springapp.mvc.service.AuthorizationService;
 import com.springapp.mvc.service.OrderService;
 import com.springapp.mvc.service.ResponseService;
 import com.springapp.mvc.service.UserRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,13 +19,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
  * Created by Vlad on 08.07.2014.
  */
 @Controller
+@Transactional
 public class OrderController {
     @Autowired
     private OrderService orderService;
@@ -81,23 +81,23 @@ public class OrderController {
     @RequestMapping(value = "/api/orders/add", method = RequestMethod.POST)
     public
     @ResponseBody
-    JSONResponse addOrdersJson(Date startTime, int personsNum, boolean allRestaurant, String note, boolean ownAlcohol, User user, HttpServletResponse response)
+    JSONResponse addOrdersJson(Order order, HttpServletResponse response)
     {
         //authorizationService = new AuthorizationServiceImpl();
         //responseService = new ResponseServiceImpl();
         //orderService = new OrderServiceImpl();
 
-        Order order = new Order();
+        /*Order order = new Order();
         order.setStartTime(startTime);
         order.setPersonsNum(personsNum);
         order.setAllRestaurant(allRestaurant);
         order.setNote(note);
         order.setOwnAlcohol(ownAlcohol);
-        order.setUser(user);
+        order.setUser(user);*/
         try {
             orderService.addOrder(order);
         } catch (OrderException e) {
-            return responseService.errorResponse("order.not_enough_space", new String(orderService.getFreeSpace(startTime) + ""));
+            return responseService.errorResponse("order.not_enough_space", orderService.getFreeSpace(order.getStartTime()) + "");
         }
         return responseService.successResponse(order);
 
