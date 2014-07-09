@@ -6,7 +6,6 @@ import com.springapp.mvc.model.User;
 import com.springapp.mvc.repository.OrderRepository;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.Calendar;
@@ -113,11 +113,9 @@ public class OrderDAO {
     }
 
     public List<Order> getOrders(User user) {
-        Criteria criteria = this.getCriteria();
-        Order order = new Order();
-        order.setUser(user);
-
-        criteria.add(Example.create(order).excludeZeroes());
-        return criteria.list();
+        return entityManager.createQuery(
+                "SELECT ord FROM Order ord WHERE ord.user.id = :inUser")
+                .setParameter("inUser", user.getId())
+                .getResultList();
     }
 }
