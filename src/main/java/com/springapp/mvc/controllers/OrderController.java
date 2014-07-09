@@ -6,9 +6,6 @@ import com.springapp.mvc.json_protocol.JSONResponse;
 import com.springapp.mvc.model.Order;
 import com.springapp.mvc.model.User;
 import com.springapp.mvc.service.AuthorizationService;
-import com.springapp.mvc.service.Impl.AuthorizationServiceImpl;
-import com.springapp.mvc.service.Impl.OrderServiceImpl;
-import com.springapp.mvc.service.Impl.ResponseServiceImpl;
 import com.springapp.mvc.service.OrderService;
 import com.springapp.mvc.service.ResponseService;
 import com.springapp.mvc.service.UserRoles;
@@ -86,9 +83,9 @@ public class OrderController {
     @ResponseBody
     JSONResponse addOrdersJson(Date startTime, int personsNum, boolean allRestaurant, String note, boolean ownAlcohol, User user, HttpServletResponse response)
     {
-        authorizationService = new AuthorizationServiceImpl();
-        responseService = new ResponseServiceImpl();
-        orderService = new OrderServiceImpl();
+        //authorizationService = new AuthorizationServiceImpl();
+        //responseService = new ResponseServiceImpl();
+        //orderService = new OrderServiceImpl();
 
         Order order = new Order();
         order.setStartTime(startTime);
