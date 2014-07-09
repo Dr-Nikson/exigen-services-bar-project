@@ -68,7 +68,7 @@ public class AuthorizationServiceImpl implements AuthorizationService
     @Override
     public User checkAccess(UserRoles role, HttpSession session) throws AuthorizationException
     {
-            UserRoles UserRole = (UserRoles)session.getAttribute("role");
+        UserRoles UserRole = (UserRoles) session.getAttribute("role");
 
         if (UserRole == role)
             {
@@ -115,6 +115,15 @@ public class AuthorizationServiceImpl implements AuthorizationService
         if (user == null)
             throw new AuthorizationException("У пользователя недостаточно прав");
 
+        return user;
+    }
+
+    @Override
+    public User getActiveUser(HttpSession session) throws AuthorizationException
+    {
+        User user = (User) session.getAttribute("user");
+        if (user == null)
+            throw new AuthorizationException("Пользователь не авторизован");
         return user;
     }
 

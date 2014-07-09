@@ -83,4 +83,27 @@ public class UsersController {
     }
 
 
+    @RequestMapping(value = "/api/users/get_authorized", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONResponse getAuthorizedUserJson(HttpServletRequest request, HttpServletResponse response)
+    {
+
+        User authorizedUser;
+
+        try
+        {
+            //loginedUser = userService.loginUser(user.getEmail(), user.getPassword());
+            //authorizedUser = authorizationService.authorizeUser(loginedUser, request.getSession(), response);
+            authorizedUser = authorizationService.getActiveUser(request.getSession());
+        }
+        catch (AuthorizationException ex)
+        {
+            return responseService.errorResponse("authorization.failed", "error");
+        }
+
+        return responseService.successResponse(authorizedUser);
+    }
+
+
 }

@@ -42,5 +42,8 @@ public interface AuthorizationService
     public User checkAccess(List<UserRoles> roles, HttpSession session) throws AuthorizationException;
 
 
+    public User getActiveUser(HttpSession session) throws AuthorizationException;
+
+
     public List<UserRoles> getRolesListForAddOrder();
 }
