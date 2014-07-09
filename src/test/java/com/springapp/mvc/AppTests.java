@@ -7,6 +7,7 @@ import com.springapp.mvc.model.User;
 import com.springapp.mvc.repository.OrderRepository;
 import com.springapp.mvc.repository.RestaurantTableRepository;
 import com.springapp.mvc.repository.UserRepository;
+import com.springapp.mvc.service.OrderStatus;
 import com.springapp.mvc.service.UserRoles;
 import com.springapp.mvc.service.UserService;
 import org.junit.Test;
@@ -136,7 +137,7 @@ public class AppTests
         order1Barney.setStartTime(date);
         order1Barney.setOwnAlcohol(false);
         order1Barney.setNote("Oh, please...");
-        order1Barney.setStatus("New");
+        order1Barney.setStatus(OrderStatus.NEW_ORDER);
         order1Barney.setUser(userBarney);
         order1Barney.setPersonsNum(18);
 
@@ -156,7 +157,7 @@ public class AppTests
         order2Barney.setStartTime(date2);
         order2Barney.setOwnAlcohol(false);
         order2Barney.setNote("Oh, please...");
-        order2Barney.setStatus("New");
+        order2Barney.setStatus(OrderStatus.NEW_ORDER);
         order2Barney.setPersonsNum(8);
         order2Barney.setUser(userBarney);
         order2Barney.getTables().add(table4);
@@ -170,7 +171,7 @@ public class AppTests
         orderJesse.setStartTime(date3);
         orderJesse.setOwnAlcohol(false);
         orderJesse.setNote("Fine!");
-        orderJesse.setStatus("New");
+        orderJesse.setStatus(OrderStatus.NEW_ORDER);
         orderJesse.setPersonsNum(3);
         orderJesse.setUser(userJesse);
         orderJesse.getTables().add(table1);

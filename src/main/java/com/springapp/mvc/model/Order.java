@@ -1,5 +1,7 @@
 package com.springapp.mvc.model;
 
+import com.springapp.mvc.service.OrderStatus;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
@@ -33,8 +35,8 @@ public class Order
     @Basic
     private Boolean ownAlcohol;
 
-    @Basic
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date startTime;
@@ -105,12 +107,12 @@ public class Order
         this.ownAlcohol = ownAlcohol;
     }
 
-    public String getStatus()
+    public OrderStatus getStatus()
     {
         return status;
     }
 
-    public void setStatus(String status)
+    public void setStatus(OrderStatus status)
     {
         this.status = status;
     }

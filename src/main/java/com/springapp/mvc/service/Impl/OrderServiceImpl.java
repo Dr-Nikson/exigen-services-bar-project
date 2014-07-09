@@ -7,6 +7,7 @@ import com.springapp.mvc.model.Order;
 import com.springapp.mvc.model.RestaurantTable;
 import com.springapp.mvc.model.User;
 import com.springapp.mvc.service.OrderService;
+import com.springapp.mvc.service.OrderStatus;
 import com.springapp.mvc.service.UserService;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,10 +67,15 @@ public class OrderServiceImpl implements OrderService {
         for (RestaurantTable table : tablesForPersons.getValue()) {
             order.getTables().add(table);
         }
+
         // 9) Сохраним пользователя
+        // Уже не надо, он в контроллере сохраняется
         //UserService userService = new UserServiceImpl();
 
-        // 10) Добавить заказ
+        // 10) установим статус - новый
+        order.setStatus(OrderStatus.NEW_ORDER);
+
+        // 11) Добавить заказ
         order = orderDAO.save(order);
         return order;
     }
