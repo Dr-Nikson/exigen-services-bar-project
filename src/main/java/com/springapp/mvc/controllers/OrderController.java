@@ -1,14 +1,11 @@
 package com.springapp.mvc.controllers;
 
 import com.springapp.mvc.exceptions.OrderException;
-import com.springapp.mvc.exceptions.UserException;
 import com.springapp.mvc.json_protocol.JSONResponse;
-import com.springapp.mvc.model.User;
 import com.springapp.mvc.model.Order;
+import com.springapp.mvc.service.Impl.ResponseServiceImpl;
 import com.springapp.mvc.service.OrderService;
 import com.springapp.mvc.service.ResponseService;
-import com.springapp.mvc.service.ResponseServiceImpl;
-import com.springapp.mvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -47,7 +47,8 @@ public interface OrderService
      *
      * @return список заказов
      */
-    public List<Order> getOrders() throws OrderException;
+    public List<Order> getOrders();
+            //throws OrderException;
 
 
     /**

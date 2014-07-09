@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -95,6 +94,7 @@ public class UsersController {
         {
             return responseService.errorResponse("authorization.access_denied", new String());
         }
+
         return responseService.successResponse(orderService.getOrders());
 
     }
