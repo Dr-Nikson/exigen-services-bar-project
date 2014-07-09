@@ -88,7 +88,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getOrders() throws OrderException {
+    public List<Order> getOrders(){
         return orderDAO.getAllOrders();
     }
 
