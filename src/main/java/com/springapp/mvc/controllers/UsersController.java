@@ -6,7 +6,6 @@ import com.springapp.mvc.json_protocol.JSONResponse;
 import com.springapp.mvc.model.User;
 import com.springapp.mvc.service.*;
 import com.springapp.mvc.service.Impl.AuthorizationServiceImpl;
-import com.springapp.mvc.service.Impl.OrderServiceImpl;
 import com.springapp.mvc.service.Impl.ResponseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  * Created by Vlad on 08.07.2014.
@@ -76,26 +74,5 @@ public class UsersController {
         return responseService.successResponse(authorizedUser);
     }
 
-    @RequestMapping(value = "/api/orders/get", method = RequestMethod.POST)
-    public
-    @ResponseBody
-    JSONResponse getOrdersJson(HttpServletRequest request)
-    {
-        HttpSession session = request.getSession();
-        authorizationService = new AuthorizationServiceImpl();
-        responseService = new ResponseServiceImpl();
-        orderService = new OrderServiceImpl();
 
-        try
-        {
-            authorizationService.checkAccess(UserRoles.USER, session);
-        }
-        catch(AuthorizationException ex)
-        {
-            return responseService.errorResponse("authorization.access_denied", new String());
-        }
-
-        return responseService.successResponse(orderService.getOrders());
-
-    }
 }
