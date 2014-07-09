@@ -1,0 +1,36 @@
+<div class="container">
+    <h3>
+        Все пользователи
+    </h3>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th class="col-xs-1">#</th>
+            <th class="col-xs-3">Имя и фамилия</th>
+            <th class="col-xs-3">Email</th>
+            <th class="col-xs-2">Телефон</th>
+            <th class="col-xs-2">Пароль</th>
+            <th class="col-xs-1">Права</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="user in users">
+            <td>{{user.id}}</td>
+            <td>{{user.firstName}} {{user.lastName}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.phone}}</td>
+            <td>{{user.password}}</td>
+            <td>{{user.role}}</td>
+            <!--<td>
+                <button class="btn btn-danger btn-large btn-block" ng-click="countriesPageCtrl.remove($index)">
+                    Remove
+                </button>
+            </td>-->
+        </tr>
+        </tbody>
+    </table>
+
+    <my-goup-btn></my-goup-btn>
+</div>
+

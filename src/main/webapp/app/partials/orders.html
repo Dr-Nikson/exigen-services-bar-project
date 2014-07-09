@@ -1,0 +1,44 @@
+<div class="container">
+    <h3>
+        Все заказы
+    </h3>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th class="col-xs-1">#</th>
+            <th class="col-xs-1">Банкет</th>
+            <th class="col-xs-1">Свой алкоголь</th>
+            <th class="col-xs-1">Количество человек</th>
+            <th class="col-xs-2">Время</th>
+            <th class="col-xs-1">Статус</th>
+            <th class="col-xs-1">Имя заказчика</th>
+            <th class="col-xs-1">Телефон заказчика</th>
+            <th class="col-xs-1"># заказчика</th>
+            <th class="col-xs-2">Пожелания</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="order in orders">
+            <td>{{order.id}}</td>
+            <td>{{order.allRestaurant}}</td>
+            <td>{{order.ownAlcohol}}</td>
+            <td>{{order.personsNum}}</td>
+            <td>{{order.startTime | date:'yyyy-MM-dd HH:mm'}}</td>
+            <td>{{order.status}}</td>
+            <td>{{order.user.firstName}} {{order.user.lastName}}</td>
+            <td>{{order.user.phone}}</td>
+            <td>{{order.user.id}}</td>
+            <td>{{order.note}}</td>
+            <!--<td>
+                <button class="btn btn-danger btn-large btn-block" ng-click="countriesPageCtrl.remove($index)">
+                    Remove
+                </button>
+            </td>-->
+        </tr>
+        </tbody>
+    </table>
+
+    <my-goup-btn></my-goup-btn>
+</div>
+

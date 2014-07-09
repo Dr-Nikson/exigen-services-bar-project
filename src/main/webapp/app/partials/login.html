@@ -1,0 +1,54 @@
+<form name="loginForm"
+      class="ang-form my-from"
+      ng-controller="LoginFormCtrl as loginFormCtrl"
+      ng-submit="loginFormCtrl.submitForm()"
+      ng-show="authorizationCtrl.showLoginBtn"
+      novalidate>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-4">
+                <div class="form-group"
+                     ng-class="{
+                        'has-success': loginForm.userEmail.$valid,
+                        'has-error': loginForm.userEmail.$invalid && (addOrderForm.userEmail.$dirty || loginForm.$dirty)}">
+                    <input type="email" value="" name="userEmail" placeholder="Email"
+                           class="form-control" ng-model="user.email"
+                           required>
+                    <!-- <span class="input-icon fui-check-inverted" ng-show="addMovieForm.movieName.$valid"></span>-->
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <div class="form-group"
+                     ng-class="{
+                        'has-success': loginForm.userPassword.$valid,
+                        'has-error': loginForm.userPassword.$invalid && (addOrderForm.userPassword.$dirty || loginForm.$dirty)}">
+                    <input type="password" value="" name="userPassword" placeholder="Пароль"
+                           class="form-control" ng-model="user.password"
+                           required>
+                    <!-- <span class="input-icon fui-check-inverted" ng-show="addMovieForm.movieName.$valid"></span>-->
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <button type="submit" class="btn btn-embossed btn-primary btn-block">
+                    Войти
+                </button>
+            </div>
+        </div>
+        <div class="row mtl">
+            <div class="col-xs-4 text-center">
+                <img src="./img/ajax-loader.gif" alt="loading" ng-show="isFormSended"/>
+            </div>
+        </div>
+        <div class="row tml">
+            <div class="col-xs-4">
+                <b>
+                    {{errorMessage}}
+                </b>
+            </div>
+        </div>
+    </div>
+</form>

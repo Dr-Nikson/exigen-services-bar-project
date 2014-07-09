@@ -1,0 +1,163 @@
+/* app css stylesheet */
+
+html {
+    overflow-y: scroll;
+}
+
+.site-title > img {
+    margin-top: -27px;
+}
+
+.container.palette-clouds {
+    border-radius: 6px;
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+.my-from .palette-clouds {
+
+    /*padding: 1em;*/
+}
+
+.my-row-standard,
+.standard-margin {
+    margin-bottom: 20px;
+}
+
+.standard-top-margin {
+    margin-top: 20px;
+}
+
+.double-top-margin {
+    margin-top: 40px;
+}
+
+.small-margin {
+    margin-bottom: 10px;
+}
+
+.double-margin {
+    margin-bottom: 40px;
+}
+
+.no-margin {
+    margin-bottom: 0;
+}
+
+.tile-movie {
+    /*min-height: 485px;*/
+}
+
+.tile-movie > .tile-image {
+    width: 80%;
+    height: auto;
+    max-width: 194px;
+    max-height: 281px;
+}
+
+.tile-movie > .tile-image.wide-screen-img {
+    width: auto;
+    max-width: 266px;
+    max-height: 150px;
+}
+
+.tile-movie > .tile-title {
+    margin-bottom: 20px;
+}
+
+.my-form-control {
+    height: 45px;
+}
+
+textarea.my-form-control {
+    min-height: 145px;
+    resize: vertical;
+}
+
+.edit-movie-title {
+    margin-top: 0;
+}
+
+.edit-movie-inline-btn {
+    margin-top: -8px;
+}
+
+.edit-movie-inline-btn-big {
+    margin-top: 9px;
+}
+
+.edit-movie-desc-title {
+    margin-top: 30px;
+    margin-bottom: 0;
+}
+
+.edit-movie-desc {
+    padding-left: 52px;
+}
+
+.form-title {
+    padding-top: 20px;
+    margin: 2px 0 20px;
+}
+
+/*.ang-form input.ng-invalid.ng-dirty
+{
+    background-color: #FA787E;
+}
+
+.ang-form input.ng-valid.ng-dirty
+{
+    background-color: #78FA89;
+}*/
+
+canvas {
+    background-color: #f3f3f3;
+    -webkit-box-shadow: 3px 3px 3px 0 #e3e3e3;
+    -moz-box-shadow: 3px 3px 3px 0 #e3e3e3;
+    box-shadow: 3px 3px 3px 0 #e3e3e3;
+    border: 1px solid #c3c3c3;
+    height: 100px;
+    margin: 6px 0 0 6px;
+}
+
+.my-drop-zone {
+    padding-top: 75px;
+    padding-bottom: 75px;
+}
+
+.my-dowpdown {
+    width: 100%;
+}
+
+.form-goup-row {
+    margin-top: 200px;
+    margin-bottom: 100px;
+}
+
+.d-slidable {
+    display: block;
+}
+
+.my-animated {
+    overflow: hidden;
+    -webkit-transition: all linear 0.5s;
+    transition: all linear 0.5s;
+}
+
+.my-animated.ng-hide {
+    height: 0;
+    opacity: 1.0;
+}
+
+.my-animated.ng-hide,
+.my-animated.ng-remove {
+    display: block !important;
+}
+
+
+
+
+
+
+
+
