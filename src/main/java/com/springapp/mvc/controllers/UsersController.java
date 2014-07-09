@@ -5,9 +5,8 @@ import com.springapp.mvc.exceptions.UserException;
 import com.springapp.mvc.json_protocol.JSONResponse;
 import com.springapp.mvc.model.User;
 import com.springapp.mvc.service.*;
-import com.springapp.mvc.service.Impl.AuthorizationServiceImpl;
-import com.springapp.mvc.service.Impl.ResponseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,15 +14,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * Created by Vlad on 08.07.2014.
  */
+@Controller
 public class UsersController {
 
     @Autowired
     private UserService userService;
 
+    @Autowired
     private ResponseService responseService;
 
     @Autowired
@@ -37,15 +39,17 @@ public class UsersController {
     @RequestMapping(value = "/api/users/get", method = RequestMethod.GET)
     public
     @ResponseBody
-    JSONResponse getUsersList(@RequestBody User user, HttpServletRequest request, HttpServletResponse response)
+    JSONResponse getUsersList(HttpServletRequest request, HttpServletResponse response)
     {
-        ResponseService responseService = new ResponseServiceImpl();
+        //ResponseService responseService = new ResponseServiceImpl();
+        List<User> users = null;
         try{
             authorizationService.checkAccess(UserRoles.ADMIN,request.getSession());
+            users = userService.getUsers();
         }catch(AuthorizationException ex){
-            responseService.errorResponse("authtorization.access_denied","error");
+            return responseService.errorResponse("authtorization.access_denied", "error");
         }
-        return responseService.successResponse(userService.getUsers());
+        return responseService.successResponse(users);
     }
 
 
@@ -55,8 +59,8 @@ public class UsersController {
     JSONResponse authorizationUserJson(@RequestBody User user, HttpServletRequest request, HttpServletResponse response){
         User loginedUser =null;
         User authorizedUser =null;
-        responseService = new ResponseServiceImpl();
-        authorizationService = new AuthorizationServiceImpl();
+        //responseService = new ResponseServiceImpl();
+        //authorizationService = new AuthorizationServiceImpl();
 
         try
         {
@@ -64,11 +68,11 @@ public class UsersController {
             authorizedUser = authorizationService.authorizeUser(loginedUser, request.getSession(), response);
         }catch(UserException ex)
         {
-            responseService.errorResponse("authtorization.failed","error");
+            return responseService.errorResponse("authtorization.failed", "error");
         }
         catch(AuthorizationException ex)
         {
-            responseService.errorResponse("authtorization.failed","error");
+            return responseService.errorResponse("authtorization.failed", "error");
         }
 
         return responseService.successResponse(authorizedUser);
