@@ -1,5 +1,6 @@
 package com.springapp.mvc.model;
 
+import com.springapp.mvc.service.UserRoles;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
@@ -30,6 +31,9 @@ public class User{
 
     @Basic
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    private UserRoles role;
 
     //@OneToMany(fetch = FetchType.EAGER,mappedBy = "user") //- без этой фигни lazy load сваливается
     @JsonIgnore
@@ -99,5 +103,15 @@ public class User{
     public Set<Order> getOrders()
     {
         return orders;
+    }
+
+    public UserRoles getRole()
+    {
+        return role;
+    }
+
+    public void setRole(UserRoles role)
+    {
+        this.role = role;
     }
 }

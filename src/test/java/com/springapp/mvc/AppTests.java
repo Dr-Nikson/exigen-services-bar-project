@@ -7,6 +7,7 @@ import com.springapp.mvc.model.User;
 import com.springapp.mvc.repository.OrderRepository;
 import com.springapp.mvc.repository.RestaurantTableRepository;
 import com.springapp.mvc.repository.UserRepository;
+import com.springapp.mvc.service.UserRoles;
 import com.springapp.mvc.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -70,6 +71,7 @@ public class AppTests
         userBarney.setEmail("stinson@g.com");
         userBarney.setPassword("Qwerty");
         userBarney.setPhone("89110051010");
+        userBarney.setRole(UserRoles.USER);
 
         User userJesse = new User();
         userJesse.setFirstName("Jesse");
@@ -77,6 +79,7 @@ public class AppTests
         userJesse.setEmail("jpinkman@j.com");
         userJesse.setPassword("1111");
         userJesse.setPhone("89062340132");
+        userJesse.setRole(UserRoles.USER);
 
         User userEve = new User();
         userEve.setFirstName("Eve");
@@ -84,10 +87,20 @@ public class AppTests
         userEve.setEmail("e.hereve@gmail.com");
         userEve.setPassword("132");
         userEve.setPhone("88001201920");
+        userEve.setRole(UserRoles.USER);
+
+        User userAdmin = new User();
+        userAdmin.setFirstName("I AM");
+        userAdmin.setLastName("ADMIN");
+        userAdmin.setEmail("admin@gmail.com");
+        userAdmin.setPassword("admin");
+        userAdmin.setPhone("88001201920");
+        userAdmin.setRole(UserRoles.ADMIN);
 
         userService.registerUser(userBarney);
         userService.registerUser(userJesse);
         userService.registerUser(userEve);
+        userService.registerUser(userAdmin);
         //userRepository.save(userBarney);
         //userRepository.save(userJesse);
         //userRepository.save(userEve);
