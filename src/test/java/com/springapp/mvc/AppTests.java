@@ -7,6 +7,7 @@ import com.springapp.mvc.model.User;
 import com.springapp.mvc.repository.OrderRepository;
 import com.springapp.mvc.repository.RestaurantTableRepository;
 import com.springapp.mvc.repository.UserRepository;
+import com.springapp.mvc.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,13 @@ public class AppTests
     @Autowired
     private RestaurantTableRepository tableRepository;
 
+
     @Autowired
     private UserDAO userDAO;
+
+
+    @Autowired
+    private UserService userService;
 
 
     /*@Before
@@ -69,7 +75,7 @@ public class AppTests
         userJesse.setFirstName("Jesse");
         userJesse.setLastName("Pinkman");
         userJesse.setEmail("jpinkman@j.com");
-        userJesse.setPassword("123ghjsdl");
+        userJesse.setPassword("1111");
         userJesse.setPhone("89062340132");
 
         User userEve = new User();
@@ -79,9 +85,12 @@ public class AppTests
         userEve.setPassword("132");
         userEve.setPhone("88001201920");
 
-        userRepository.save(userBarney);
-        userRepository.save(userJesse);
-        userRepository.save(userEve);
+        userService.registerUser(userBarney);
+        userService.registerUser(userJesse);
+        userService.registerUser(userEve);
+        //userRepository.save(userBarney);
+        //userRepository.save(userJesse);
+        //userRepository.save(userEve);
 
         RestaurantTable table1 = new RestaurantTable();
         table1.setPersonsNum(2);

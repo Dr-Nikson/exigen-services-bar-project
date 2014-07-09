@@ -1,6 +1,7 @@
 package com.springapp.mvc.controllers;
 
 import com.springapp.mvc.exceptions.AuthorizationException;
+import com.springapp.mvc.exceptions.OrderException;
 import com.springapp.mvc.json_protocol.JSONResponse;
 import com.springapp.mvc.model.Order;
 import com.springapp.mvc.service.AuthorizationService;
@@ -9,11 +10,13 @@ import com.springapp.mvc.service.ResponseService;
 import com.springapp.mvc.service.UserRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +25,7 @@ import java.util.List;
  * Created by Vlad on 08.07.2014.
  */
 @Controller
+@Transactional
 public class OrderController {
     @Autowired
     private OrderService orderService;
@@ -69,6 +73,34 @@ public class OrderController {
         }
 
         return responseService.successResponse(orders);
+
+    }
+
+
+
+    @RequestMapping(value = "/api/orders/add", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JSONResponse addOrdersJson(Order order, HttpServletResponse response)
+    {
+        //authorizationService = new AuthorizationServiceImpl();
+        //responseService = new ResponseServiceImpl();
+        //orderService = new OrderServiceImpl();
+
+        /*Order order = new Order();
+        order.setStartTime(startTime);
+        order.setPersonsNum(personsNum);
+        order.setAllRestaurant(allRestaurant);
+        order.setNote(note);
+        order.setOwnAlcohol(ownAlcohol);
+        order.setUser(user);*/
+        try {
+            orderService.addOrder(order);
+        } catch (OrderException e) {
+            return responseService.errorResponse("order.not_enough_space", orderService.getFreeSpace(order.getStartTime()) + "");
+        }
+        return responseService.successResponse(order);
+
 
     }
 

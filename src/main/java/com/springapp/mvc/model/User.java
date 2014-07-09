@@ -1,5 +1,7 @@
 package com.springapp.mvc.model;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,8 +31,8 @@ public class User{
     @Basic
     private String password;
 
-    //@OneToMany(fetch = FetchType.EAGER,mappedBy = "user") - без этой фигни lazy load сваливается
-   // @JsonIgnore
+    //@OneToMany(fetch = FetchType.EAGER,mappedBy = "user") //- без этой фигни lazy load сваливается
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private Set<Order> orders = new HashSet<Order>();
 
