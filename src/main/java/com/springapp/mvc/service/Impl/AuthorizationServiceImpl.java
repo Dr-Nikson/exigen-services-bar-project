@@ -48,7 +48,7 @@ public class AuthorizationServiceImpl implements AuthorizationService
         if(authorizedUser != null)
         {
             session.setAttribute("user", user);
-            session.setAttribute("role", UserRoles.USER);
+            session.setAttribute("role", user.getRole());
             response.addCookie(new Cookie("id", user.getId().toString()));
         }
         else

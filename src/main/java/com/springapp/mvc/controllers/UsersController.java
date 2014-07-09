@@ -83,7 +83,7 @@ public class UsersController {
     }
 
 
-    @RequestMapping(value = "/api/users/get_authorized", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/users/get_authorized", method = RequestMethod.GET)
     public
     @ResponseBody
     JSONResponse getAuthorizedUserJson(HttpServletRequest request, HttpServletResponse response)
