@@ -55,6 +55,11 @@ public class OrderServiceImpl implements OrderService {
             throw new OrderException("Недостаточно места - столы заняты!");
         // 2) Получить все заказы на дату из order.startTime
         List<Order> orders = orderDAO.getOrders(order.getStartTime());
+
+        // 2.1) Если хотим заказть весь зал и уже есть заказы на эту дату - ошибка (нет мест)
+        if (order.getAllRestaurant() && orders.size() != 0)
+            throw new OrderException("Невозможно заказать банкет - на этот день уже есть заказы");
+
         // 3) Получить все заказанные столы на дату из order.startTime
         List<RestaurantTable> reservedTables = new ArrayList<RestaurantTable>();
         for (Order tmpOrder : orders) {
@@ -64,9 +69,20 @@ public class OrderServiceImpl implements OrderService {
         }
         // 4) Получить все свободные столы на дату из order.startTime
         List<RestaurantTable> freeTables = tableDAO.getTablesExcludeList(reservedTables);
+
         // 5) Получить столы на необходимое количество человек - order.personsNum
-        Pair<Integer, List<RestaurantTable>> tablesForPersons = tableDAO.getTablesForPersons(freeTables, order.getPersonsNum());
-        // ???? 6) Если заказ на весь ресторан - получаем все столы
+        // 6) Если заказ на весь ресторан - получаем все столы - tableDAO.getAvailableSpace()
+        Pair<Integer, List<RestaurantTable>> tablesForPersons;
+        if (order.getAllRestaurant())
+        {
+            // TODO: maybe overflow here. Change getTablesForPersons signature to Long instead Integer
+            tablesForPersons = tableDAO.getTablesForPersons(freeTables, (int) (long) tableDAO.getAvailableSpace());
+        }
+        else
+        {
+            tablesForPersons = tableDAO.getTablesForPersons(freeTables, order.getPersonsNum());
+        }
+
         // 7) Проверяем ошибки
         if (tablesForPersons.getKey() < order.getPersonsNum())
             throw new OrderException("Неудалось добавить заказ - неудалось получить достаточное количество столов (получено:"
