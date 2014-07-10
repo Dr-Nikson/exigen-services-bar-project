@@ -1,9 +1,6 @@
 package com.springapp.mvc.controllers;
 
-import com.springapp.mvc.exceptions.AuthorizationException;
-import com.springapp.mvc.exceptions.DuplicateOrderException;
-import com.springapp.mvc.exceptions.OrderException;
-import com.springapp.mvc.exceptions.UserException;
+import com.springapp.mvc.exceptions.*;
 import com.springapp.mvc.json_protocol.JSONResponse;
 import com.springapp.mvc.model.Order;
 import com.springapp.mvc.model.User;
@@ -106,6 +103,10 @@ public class OrderController {
         catch (DuplicateOrderException e)
         {
             return responseService.errorResponse("order.duplicate", "");
+        }
+        catch (BanquetOrderException e)
+        {
+            return responseService.errorResponse("order.banquet_fail", "");
         }
 
 

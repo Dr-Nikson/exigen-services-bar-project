@@ -1,5 +1,6 @@
 package com.springapp.mvc.service;
 
+import com.springapp.mvc.exceptions.BanquetOrderException;
 import com.springapp.mvc.exceptions.DuplicateOrderException;
 import com.springapp.mvc.exceptions.OrderException;
 import com.springapp.mvc.model.Order;
@@ -32,7 +33,7 @@ public interface OrderService
      * @throws OrderException если заказ не удлось разместить
      * @throws com.springapp.mvc.exceptions.DuplicateOrderException если пользователь уже назначал заказ на текущую дату
      */
-    public Order addOrder(Order order) throws OrderException, DuplicateOrderException;
+    public Order addOrder(Order order) throws OrderException, DuplicateOrderException, BanquetOrderException;
 
 
     /**

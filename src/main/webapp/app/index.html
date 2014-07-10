@@ -101,13 +101,16 @@
 <hr/>
 
 <div class="container" ng-show="authorizationCtrl.isAuthorized()">
-    <div class="row">
-        <div class="col-xs-12">
+    <div class="row mbl">
+        <div class="col-xs-12 text-center">
             Вы вошли как {{authorizationCtrl.user.firstName}} {{authorizationCtrl.user.lastName}}
             ({{authorizationCtrl.user.email}})
         </div>
     </div>
-    <div class="row" ng-show="authorizationCtrl.isAdmin()">
+    <div class="row mtl mbl" ng-show="authorizationCtrl.isAdmin()">
+        <div class="col-xs-4">
+
+        </div>
         <div class="col-xs-2">
             <a href="#/users" class="btn btn-embossed btn-primary">
                 Все пользователи
@@ -118,22 +121,34 @@
                 Все заказы
             </a>
         </div>
+        <div class="col-xs-4">
+
+        </div>
     </div>
 </div>
 
 
 <div class="container" ng-show="authorizationCtrl.showStatusBar">
-    <div class="row" ng-show="authorizationCtrl.isFormSended">
-        <div class="col-xs-1">
+    <div class="row mbl" ng-show="authorizationCtrl.isFormSended">
+        <div class="col-xs-12 text-center">
             <img src="./img/ajax-loader.gif" alt="loading"/>
         </div>
-        <div class="col-xs-4">
+    </div>
+    <div class="row mbl" ng-show="authorizationCtrl.isFormSended">
+        <div class="col-xs-12 text-center">
             Получение информации о пользователе
         </div>
     </div>
-    <div class="row" ng-show="authorizationCtrl.showErrorMessage">
-        <div class="col-xs-12">
+    <div class="row mbl" ng-show="authorizationCtrl.showErrorMessage">
+        <div class="col-xs-12  text-center">
             {{authorizationCtrl.errorMessage}}
+        </div>
+    </div>
+    <div class="row mtl mbl" ng-show="authorizationCtrl.showLoginBtn">
+        <div class="col-xs-12 text-center">
+            <a href="#/login" class="btn btn-embossed btn-primary">
+                Вход
+            </a>
         </div>
     </div>
 </div>

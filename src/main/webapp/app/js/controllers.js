@@ -69,13 +69,14 @@
 
         var showErrorMsg = function () {
             self.showErrorMessage = true;
-            self.errorMessage = 'Вы не авторизовны';
+            self.errorMessage = 'Вы не авторизовны. При добавлении нового заказа Мы автоматически создадим для Вас аккаунт.'
+                + ' Если у вас уже есть аккаунт - войдите используя форму входа';
+            self.showLoginBtn = true;
 
-            $timeout(function () {
-                self.showErrorMessage = false;
-                self.showLoginBtn = true;
-                self.showStatusBar = false;
-            }, 5000);
+            /*$timeout(function () {
+             self.showErrorMessage = false;
+             //self.showStatusBar = false;
+             },5000);*/
         };
 
         var getAuthorizedUserData = function () {
@@ -113,7 +114,9 @@
         };
 
         self.authorizeUser = function (user) {
-            self.showLoginBtn = false;
+            //self.showLoginBtn = false;
+            self.showStatusBar = false; // - Спрячет все
+            //self.showErrorMessage = false;
             self.user = user;
         };
 
@@ -367,7 +370,11 @@
                     break;
                 case 'order.duplicate':
                     self.$scope.errorMessage = 'Невозможно добавить заказ - у вас уже есть бронь на эту дату.'
-                        + 'Если Вы хотите поменять условия брони - обратитесь к администратору по номеру 8(800)923-12-32';
+                        + ' Если Вы хотите поменять условия брони - обратитесь к администратору по номеру 8(800)923-12-32';
+                    break;
+                case 'order.banquet_fail':
+                    self.$scope.errorMessage = 'Невозможно добавить заказ - заказать весь зал(банкет) не получится:'
+                        + ' на эту дату уже заказны столики';
                     break;
                 default :
                     self.$scope.errorMessage = 'Неизвестная ошибка';

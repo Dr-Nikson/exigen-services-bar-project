@@ -2,6 +2,7 @@ package com.springapp.mvc.service.Impl;
 
 import com.springapp.mvc.DAO.OrderDAO;
 import com.springapp.mvc.DAO.RestaurantTableDAO;
+import com.springapp.mvc.exceptions.BanquetOrderException;
 import com.springapp.mvc.exceptions.DuplicateOrderException;
 import com.springapp.mvc.exceptions.OrderException;
 import com.springapp.mvc.model.Order;
@@ -48,7 +49,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order addOrder(Order order) throws OrderException, DuplicateOrderException
+    public Order addOrder(Order order) throws OrderException, DuplicateOrderException, BanquetOrderException
     {
         // 1) Проверим на возможность добавления ордера
         if (!checkOrderAvailability(order))
@@ -58,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
 
         // 2.1) Если хотим заказть весь зал и уже есть заказы на эту дату - ошибка (нет мест)
         if (order.getAllRestaurant() && orders.size() != 0)
-            throw new OrderException("Невозможно заказать банкет - на этот день уже есть заказы");
+            throw new BanquetOrderException("Невозможно заказать банкет - на этот день уже есть заказы");
 
         // 3) Получить все заказанные столы на дату из order.startTime
         List<RestaurantTable> reservedTables = new ArrayList<RestaurantTable>();
