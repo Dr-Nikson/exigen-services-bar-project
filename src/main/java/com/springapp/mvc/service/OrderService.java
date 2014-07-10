@@ -1,5 +1,6 @@
 package com.springapp.mvc.service;
 
+import com.springapp.mvc.exceptions.DuplicateOrderException;
 import com.springapp.mvc.exceptions.OrderException;
 import com.springapp.mvc.model.Order;
 import com.springapp.mvc.model.User;
@@ -18,7 +19,7 @@ public interface OrderService
      * @param order только поля startTime,personsNum,allRestaurant
      * @return true - если заказ можно разместить
      */
-    public boolean checkOrderAvailability(Order order) throws OrderException;
+    public boolean checkOrderAvailability(Order order) throws OrderException, DuplicateOrderException;
 
 
     /**
@@ -28,9 +29,10 @@ public interface OrderService
      *
      * @param order данные заказа
      * @return новый заказ
-     * @throws OrderException
+     * @throws OrderException если заказ не удлось разместить
+     * @throws com.springapp.mvc.exceptions.DuplicateOrderException если пользователь уже назначал заказ на текущую дату
      */
-    public Order addOrder(Order order) throws OrderException;
+    public Order addOrder(Order order) throws OrderException, DuplicateOrderException;
 
 
     /**

@@ -1,6 +1,7 @@
 package com.springapp.mvc.controllers;
 
 import com.springapp.mvc.exceptions.AuthorizationException;
+import com.springapp.mvc.exceptions.DuplicateOrderException;
 import com.springapp.mvc.exceptions.OrderException;
 import com.springapp.mvc.exceptions.UserException;
 import com.springapp.mvc.json_protocol.JSONResponse;
@@ -101,6 +102,10 @@ public class OrderController {
         catch (OrderException e)
         {
             return responseService.errorResponse("order.not_enough_space", orderService.getFreeSpace(order.getStartTime()));
+        }
+        catch (DuplicateOrderException e)
+        {
+            return responseService.errorResponse("order.duplicate", "");
         }
 
 

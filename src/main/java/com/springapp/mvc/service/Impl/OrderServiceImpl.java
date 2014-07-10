@@ -2,6 +2,7 @@ package com.springapp.mvc.service.Impl;
 
 import com.springapp.mvc.DAO.OrderDAO;
 import com.springapp.mvc.DAO.RestaurantTableDAO;
+import com.springapp.mvc.exceptions.DuplicateOrderException;
 import com.springapp.mvc.exceptions.OrderException;
 import com.springapp.mvc.model.Order;
 import com.springapp.mvc.model.RestaurantTable;
@@ -34,18 +35,21 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public boolean checkOrderAvailability(Order order) {
+    public boolean checkOrderAvailability(Order order) throws DuplicateOrderException
+    {
         Long reservedSpace = orderDAO.getReservedSpace(order.getStartTime());
         Long availableSpace = tableDAO.getAvailableSpace();
         List<Order> nowOrders = getOrders(order.getUser(),order.getStartTime());
+
         if(nowOrders.size() != 0)  //проверка на попытку повторного заказа одного пользователя на ту же дату
-            //throw new OrderExeption("Попытка повторного заказа");
-            return false;
+            throw new DuplicateOrderException("Попытка повторного заказа");
+
         return (availableSpace - reservedSpace) >= order.getPersonsNum();
     }
 
     @Override
-    public Order addOrder(Order order) throws OrderException {
+    public Order addOrder(Order order) throws OrderException, DuplicateOrderException
+    {
         // 1) Проверим на возможность добавления ордера
         if (!checkOrderAvailability(order))
             throw new OrderException("Недостаточно места - столы заняты!");
