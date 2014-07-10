@@ -12,13 +12,16 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by TofixXx on 07.07.2014.
  */
 @Service
 @Transactional
-public class AuthorizationServiceImpl implements AuthorizationService {
+public class AuthorizationServiceImpl implements AuthorizationService
+{
 
     @Autowired
     private UserDAO userDao;
@@ -45,7 +48,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         if(authorizedUser != null)
         {
             session.setAttribute("user", user);
-            session.setAttribute("role", UserRoles.USER);
+            session.setAttribute("role", user.getRole());
             response.addCookie(new Cookie("id", user.getId().toString()));
         }
         else
@@ -63,16 +66,73 @@ public class AuthorizationServiceImpl implements AuthorizationService {
      * @throws AuthorizationException если пользователь не авторизован
      */
     @Override
-    public boolean checkAccess(UserRoles role, HttpSession session) throws AuthorizationException
+    public User checkAccess(UserRoles role, HttpSession session) throws AuthorizationException
     {
-            UserRoles UserRole = (UserRoles)session.getAttribute("role");
-            if(UserRole == role)
+        UserRoles UserRole = (UserRoles) session.getAttribute("role");
+
+        if (UserRole == role)
             {
-                return true;
+                return (User) session.getAttribute("user");
             }
             else
             {
                 throw new AuthorizationException();
             }
+
+        //return null;
+    }
+
+
+    /**
+     * Метод проверяет права авторизованного пользователя
+     *
+     * @param roles   массив прав
+     * @param session
+     * @return user, если права у пользователя есть
+     * @throws com.springapp.mvc.exceptions.AuthorizationException если пользователь не авторизован
+     */
+    @Override
+    public User checkAccess(List<UserRoles> roles, HttpSession session) throws AuthorizationException
+    {
+        //boolean isAuhtorized = false;
+        User user = null;
+
+        for (UserRoles role : roles)
+        {
+
+            try
+            {
+                user = checkAccess(role, session);
+                if (user != null)
+                    break;
+            }
+            catch (AuthorizationException e)
+            {
+
+            }
+        }
+
+        if (user == null)
+            throw new AuthorizationException("У пользователя недостаточно прав");
+
+        return user;
+    }
+
+    @Override
+    public User getActiveUser(HttpSession session) throws AuthorizationException
+    {
+        User user = (User) session.getAttribute("user");
+        if (user == null)
+            throw new AuthorizationException("Пользователь не авторизован");
+        return user;
+    }
+
+    @Override
+    public List<UserRoles> getRolesListForAddOrder()
+    {
+        ArrayList<UserRoles> userRoles = new ArrayList<UserRoles>();
+        userRoles.add(UserRoles.USER);
+        userRoles.add(UserRoles.ADMIN);
+        return userRoles;
     }
 }

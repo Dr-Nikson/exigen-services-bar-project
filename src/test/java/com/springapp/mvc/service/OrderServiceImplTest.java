@@ -1,6 +1,5 @@
 package com.springapp.mvc.service;
 
-import com.springapp.mvc.DAO.UserDAO;
 import com.springapp.mvc.model.Order;
 import com.springapp.mvc.model.User;
 import org.junit.Test;
@@ -23,9 +22,8 @@ public class OrderServiceImplTest
     @Autowired
     private OrderService orderService;
 
-
     @Autowired
-    private UserDAO userDAO;
+    private UserService userService;
 
 
     @Test
@@ -38,8 +36,8 @@ public class OrderServiceImplTest
         userBarney.setPassword("Qwerty");
         userBarney.setPhone("89114452043");
 
-        // TODO: удалить сохранение пользователя
-        userDAO.save(userBarney);
+        // TODO: удалить сохранение пользователя или не надо)))
+        userBarney = userService.registerUser(userBarney);
 
         Order order1Barney = new Order();
         order1Barney.setAllRestaurant(true);
@@ -48,7 +46,7 @@ public class OrderServiceImplTest
         order1Barney.setStartTime(date);
         order1Barney.setOwnAlcohol(false);
         order1Barney.setNote("Oh, please...");
-        order1Barney.setStatus("New");
+        order1Barney.setStatus(OrderStatus.NEW_ORDER);
         order1Barney.setUser(userBarney);
         order1Barney.setPersonsNum(18);
 

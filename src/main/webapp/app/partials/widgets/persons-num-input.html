@@ -1,0 +1,8 @@
+<div class="form-group">
+    <select name="herolist" value="{{selected}}" class="select-block" ng-model="selected" my-dropdown>
+        <!--<option value="" ng-selected="!selected">2</option>-->
+        <option ng-repeat="personNum in availableChooses" value="{{personNum}}"
+                ng-selected="selected == personNum">{{personNum}}
+        </option>
+    </select>
+</div>

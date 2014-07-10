@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
@@ -38,6 +39,14 @@ public class UserDAO
         Criteria criteria = getCriteria();
         Object o = criteria.add(Example.create(user).excludeZeroes()).list();
     }*/
+
+
+    public boolean isUserExist(String email)
+    {
+        Query q = entityManager.createQuery("SELECT COUNT(u.id) FROM User u WHERE u.email = :email").setParameter("email", email);
+        Long foundedUsersCount = (Long) q.getSingleResult();
+        return foundedUsersCount >= 1;
+    }
 
 
     public List<User> get()

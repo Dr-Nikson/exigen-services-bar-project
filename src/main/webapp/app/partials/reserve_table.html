@@ -1,0 +1,328 @@
+<form name="addOrderForm"
+      class="ang-form my-from"
+      ng-controller="OrderFormCtrl as orderFormCtrl"
+      ng-submit="orderFormCtrl.submitForm()"
+      ng-show="showForm"
+      novalidate>
+
+<div class="container palette-clouds">
+
+    <div class="row">
+        <div class="col-xs-2">
+            <button type="button"
+                    class="btn btn-primary btn-block"
+                    ng-class="{'btn-inverse active': dataChoosedBy=='today'}"
+                    ng-click="orderFormCtrl.chooseDate(todayDate,'today')"
+                    ng-disabled="todayBtnDisabled">
+                Сегодня ({{todayDate | date : 'dd.MM'}})
+            </button>
+        </div>
+
+        <div class="col-xs-2">
+            <button type="button"
+                    class="btn btn-primary btn-block"
+                    ng-class="{'btn-inverse active': dataChoosedBy=='tomorrow'}"
+                    ng-click="orderFormCtrl.chooseDate(tomorrowDate,'tomorrow')">
+                Завтра ({{tomorrowDate | date : 'dd.MM'}})
+            </button>
+        </div>
+
+        <div class="col-xs-3">
+            <button type="button"
+                    class="btn btn-primary btn-block"
+                    ng-class="{'btn-inverse active': dataChoosedBy=='after_tomorrow'}"
+                    ng-click="orderFormCtrl.chooseDate(afterTomorrowDate,'after_tomorrow')">
+                Послезавтра ({{afterTomorrowDate | date : 'dd.MM'}})
+            </button>
+        </div>
+
+        <div class="col-xs-3">
+            <div class="form-group" ng-class="{
+                    'has-success': addOrderForm.startTime.$valid,
+                    'has-error': addOrderForm.startTime.$invalid && addStaffForm.startTime.$dirty}">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" id="staffBirthYearDropdown" role="button" data-toggle="dropdown"
+                       data-target="#" href>
+                        <div class="input-group">
+                            <input type="text"
+                                   name="startTime"
+                                   class="form-control"
+                                   ng-model="tmpOrderDate.formatted"
+                                   required
+                                   readonly>
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <datetimepicker data-ng-model="tmpOrderDate.raw"
+                                        name="bitch"
+                                        data-datetimepicker-config="{ dropdownSelector: '#staffBirthYearDropdown', startView:'day', minView:'day'}"/>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-2">
+            <persons-num-input ng-model="order.personsNum" ng-show="!order.allRestaurant"></persons-num-input>
+            <div class="form-group"
+                 ng-show="order.allRestaurant"
+                 ng-class="{
+                        'has-success': addOrderForm.orderBanquetPersonsNum.$valid,
+                        'has-error': addOrderForm.orderBanquetPersonsNum.$invalid && addOrderForm.orderBanquetPersonsNum.$dirty}"
+                 data-toggle="tooltip"
+                 data-placement="top"
+                 title="Поле обязательно и не может быть пустым. Должно содержать только цифры. Минимальное количество гостей: 10, максимальное: 500"
+                 my-tooltip
+                 show-tooltip-trigger="tooltipTriggers.orderBanquetPersonsNum">
+                <input type="number"
+                       value=""
+                       name="orderBanquetPersonsNum"
+                       placeholder="кол-во гостей"
+                       class="form-control"
+                       ng-model="tmpPersonsBanquetNum"
+                       min="10"
+                       max="500"
+                       ng-pattern="/^[0-9]+$/"
+                       ng-required="order.allRestaurant">
+                <span class="input-icon fui-check-inverted" ng-show="addOrderForm.orderBanquetPersonsNum.$valid"></span>
+            </div>
+        </div>
+
+
+    </div>
+
+    <time-choose-input ng-model="tmpOrderTime.raw" track-by-date="timeInputTrackingDate"></time-choose-input>
+
+    <div class="row mtl">
+        <div class="col-xs-12">
+
+            <div class="form-group">
+                <input type="text" value="" name="orderNote" placeholder="Ваши пожелания"
+                       class="form-control" ng-model="order.note">
+                <!-- <span class="input-icon fui-check-inverted" ng-show="addMovieForm.movieName.$valid"></span>-->
+            </div>
+        </div>
+    </div>
+
+    <div ng-show="order.allRestaurant">
+        <div class="row">
+            <div class="col-xs-12">
+                <b>Свой алкоголь:</b>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2">
+                <div class="switch switch-square"
+                     data-on-label="<i class='fui-check'></i>"
+                     data-off-label="<i class='fui-cross'></i>"
+                     ng-model="order.ownAlcohol"
+                     my-switch>
+                    <input type="checkbox"/>
+                </div>
+            </div>
+            <div class="col-xs-10">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container palette-clouds mtl mbl" ng-show="!authorizationCtrl.isAuthorized()">
+
+    <div class="row">
+        <div class="col-xs-3">
+            <b>Имя</b>
+        </div>
+        <div class="col-xs-2">
+            <b>Фамилия</b>
+        </div>
+        <div class="col-xs-4">
+            <b>Телефон</b>
+        </div>
+        <div class="col-xs-3">
+            <b>E-mail</b>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-3">
+            <div class="form-group"
+                 ng-class="{
+                        'has-success': addOrderForm.orderUserFirstName.$valid,
+                        'has-error': addOrderForm.orderUserFirstName.$invalid && (addOrderForm.orderUserFirstName.$dirty || addOrderForm.$dirty)}"
+                 data-toggle="tooltip"
+                 data-placement="top"
+                 title="Поле обязательно и не может быть пустым. Должно содержать только буквы, цифры и пробел"
+                 my-tooltip
+                 show-tooltip-trigger="tooltipTriggers.orderUserFirstName">
+                <input type="text"
+                       value=""
+                       name="orderUserFirstName"
+                       placeholder="Введите имя"
+                       class="form-control"
+                       ng-model="order.user.firstName"
+                       ng-pattern="/^[A-zА-я0-9,.\s]+$/"
+                       ng-required="!authorizationCtrl.isAuthorized()">
+                <span class="input-icon fui-check-inverted" ng-show="addOrderForm.orderUserFirstName.$valid"></span>
+            </div>
+        </div>
+
+        <div class="col-xs-2">
+            <div class="form-group"
+                 ng-class="{
+                        'has-success': addOrderForm.orderUserLastName.$valid,
+                        'has-error': addOrderForm.orderUserLastName.$invalid && (addOrderForm.orderUserLastName.$dirty || addOrderForm.$dirty)}"
+                 data-toggle="tooltip"
+                 data-placement="top"
+                 title="Поле не обязательно и может быть пустым. Должно содержать только буквы, цифры и пробел"
+                 my-tooltip
+                 show-tooltip-trigger="tooltipTriggers.orderUserLastName">
+                <input type="text"
+                       value=""
+                       name="orderUserLastName"
+                       placeholder="Не обязательно"
+                       class="form-control"
+                       ng-model="order.user.lastName"
+                       ng-pattern="/^[A-zА-я0-9,.\s]+$/">
+                <!--<span class="input-icon fui-check-inverted" ng-show="addOrderForm.orderUserLastName.$valid"></span>-->
+            </div>
+        </div>
+
+        <div class="col-xs-2">
+            <phone-code-input ng-model="tmpPhoneCode"></phone-code-input>
+        </div>
+
+        <div class="col-xs-2">
+            <div class="form-group"
+                 ng-class="{
+                        'has-success': addOrderForm.orderUserPhone.$valid,
+                        'has-error': addOrderForm.orderUserPhone.$invalid && (addOrderForm.orderUserPhone.$dirty || addOrderForm.$dirty)}"
+                 data-toggle="tooltip"
+                 data-placement="top"
+                 title="Поле обязательно и не может быть пустым. Должно содержать номер телефона (без кода страны)"
+                 my-tooltip
+                 show-tooltip-trigger="tooltipTriggers.orderUserPhone">
+                <input type="number"
+                       value=""
+                       name="orderUserPhone"
+                       placeholder="1112233"
+                       class="form-control"
+                       ng-model="tmpPhoneNumber"
+                       ng-pattern="/^[0-9]+$/"
+                       ng-minlength="3"
+                       ng-required="!authorizationCtrl.isAuthorized()">
+                <span class="input-icon fui-check-inverted" ng-show="addOrderForm.orderUserPhone.$valid"></span>
+            </div>
+        </div>
+
+        <div class="col-xs-3">
+            <div class="form-group"
+                 ng-class="{
+                        'has-success': addOrderForm.orderUserEmail.$valid,
+                        'has-error': addOrderForm.orderUserEmail.$invalid && (addOrderForm.orderUserEmail.$dirty || addOrderForm.$dirty)}"
+                 data-toggle="tooltip"
+                 data-placement="top"
+                 title="Поле обязательно и не может быть пустым. Должно содержать существющий email адрес"
+                 my-tooltip
+                 show-tooltip-trigger="tooltipTriggers.orderUserEmail">
+                <input type="email"
+                       value=""
+                       name="orderUserEmail"
+                       placeholder="you@mail.com"
+                       class="form-control"
+                       ng-model="order.user.email"
+                       ng-required="!authorizationCtrl.isAuthorized()">
+                <span class="input-icon fui-check-inverted" ng-show="addOrderForm.orderUserEmail.$valid"></span>
+            </div>
+        </div>
+    </div>
+
+    <!--<div class="row">
+        <div class="col-xs-3">
+            <p>
+                <small>
+                    Поле не может быть пустым
+                </small>
+            </p>
+        </div>
+        <div class="col-xs-2">
+            <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Tooltip on top" my-tooltip>Tooltip on top</button>
+        </div>
+        <div class="col-xs-4">
+            <b>Поле не может быть пустым</b>
+        </div>
+        <div class="col-xs-3">
+            <b>Поле не может быть пустым</b>
+        </div>
+    </div>-->
+
+</div>
+
+<div class="container">
+    <div class="row mtl">
+        <div class="col-xs-8">
+            <b>
+                {{errorMessage}}
+            </b>
+        </div>
+        <div class="col-xs-1">
+            <img src="./img/ajax-loader.gif" alt="loading" ng-show="isFormSended"/>
+        </div>
+        <div class="col-xs-3">
+            <button type="submit"
+                    class="btn btn-hg btn-success btn-block"
+                    ng-class="{'disabled':!authorizationCtrl.showLoginBtn && !authorizationCtrl.isAuthorized()}"
+                    ng-disabled="!authorizationCtrl.showLoginBtn && !authorizationCtrl.isAuthorized()">
+                Забронировать
+            </button>
+        </div>
+    </div>
+</div>
+
+<hr/>
+
+<div class="container" ng-show="authorizationCtrl.showLoginBtn">
+    <div class="row">
+        <div class="col-xs-11">
+
+        </div>
+        <div class="col-xs-1">
+            <a href="#/login" class="btn btn-embossed btn-primary">
+                Вход
+            </a>
+        </div>
+    </div>
+</div>
+
+</form>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-xs-12" ng-show="showTableSucceesMsg">
+            <h6>
+                Благодарим за бронирование столика в нашем ресторане. Ваш столик забронирован на
+                {{successOrder.targetDate}}
+                число на {{successOrder.targetTime}}. Наш менеджер свяжется с Вами за 40 минут до Вашего прибытия в
+                ресторан.
+                Бронь аннулируется через 30 минут после указанного Вами времени если Вы или Ваши гости не прибудут в
+                ресторан.
+                В случае, если Вы задерживаетесь или опазыдыватете, просим сообщить менеджеру ресторана по телефону 8
+                (800) 976-19-23
+            </h6>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12" ng-show="showBanquetSucceesMsg">
+            <h6>
+                Благодарим за бронирование банкета в нашем ресторане. Зал забронирован на {{successOrder.targetDate}}
+                число на {{successOrder.targetTime}}. Наш менеджер свяжется с Вами в течение ближайшего часа для
+                обсуждения
+                меню и дополнительных условий. В случае изменений условий брони или аннулирования брони
+                просим сообщить менеджеру ресторана по телефону 8 (800) 976-19-23
+            </h6>
+        </div>
+    </div>
+</div>

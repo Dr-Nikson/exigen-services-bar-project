@@ -1,5 +1,7 @@
 package com.springapp.mvc.model;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,22 +20,27 @@ public class RestaurantTable
     @Basic
     private Integer personsNum;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "tables")
     private Set<Order> orders = new HashSet<Order>();
 
-    public Long getId() {
+    public Long getId()
+    {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Long id)
+    {
         this.id = id;
     }
 
-    public Integer getPersonsNum() {
+    public Integer getPersonsNum()
+    {
         return personsNum;
     }
 
-    public void setPersonsNum(Integer personsNum) {
+    public void setPersonsNum(Integer personsNum)
+    {
         this.personsNum = personsNum;
     }
 }

@@ -26,7 +26,7 @@ public class JSONErrorResponse implements JSONResponse
         return errorCode;
     }
 
-    public Object getErrorDetalis()
+    public Object getErrorDetails()
     {
         return errorDetails;
     }

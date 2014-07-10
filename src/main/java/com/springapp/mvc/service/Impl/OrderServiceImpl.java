@@ -3,11 +3,11 @@ package com.springapp.mvc.service.Impl;
 import com.springapp.mvc.DAO.OrderDAO;
 import com.springapp.mvc.DAO.RestaurantTableDAO;
 import com.springapp.mvc.exceptions.OrderException;
-import com.springapp.mvc.exceptions.UserException;
 import com.springapp.mvc.model.Order;
 import com.springapp.mvc.model.RestaurantTable;
 import com.springapp.mvc.model.User;
 import com.springapp.mvc.service.OrderService;
+import com.springapp.mvc.service.OrderStatus;
 import com.springapp.mvc.service.UserService;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +22,15 @@ import java.util.List;
 //@Qualifier(value = "orderService")
 @Transactional
 public class OrderServiceImpl implements OrderService {
+
     @Autowired
     private OrderDAO orderDAO;
 
-
     @Autowired
     private RestaurantTableDAO tableDAO;
+
+    @Autowired
+    private UserService userService;
 
 
     @Override
@@ -64,20 +67,15 @@ public class OrderServiceImpl implements OrderService {
         for (RestaurantTable table : tablesForPersons.getValue()) {
             order.getTables().add(table);
         }
+
         // 9) Сохраним пользователя
+        // Уже не надо, он в контроллере сохраняется
+        //UserService userService = new UserServiceImpl();
 
-        // TODO: Вызов userService
-        UserService userService = new UserServiceImpl();
-        try
-        {
-            userService.loginUser(order.getUser().getEmail(), order.getUser().getEmail());
-        }
-        catch (UserException ex)
-        {
-            userService.registerUser(order.getUser());
-        }
+        // 10) установим статус - новый
+        order.setStatus(OrderStatus.NEW_ORDER);
 
-        // 10) Добавить заказ
+        // 11) Добавить заказ
         order = orderDAO.save(order);
         return order;
     }

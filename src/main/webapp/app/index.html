@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html lang="en" ng-app="cleshFilm" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html lang="en" ng-app="cleshFilm" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html lang="en" ng-app="cleshFilm" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en" ng-app="cleshFilm" class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>My AngularJS App</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <link rel="stylesheet" href="bower_components/html5-boilerplate/css/normalize.css"> -->
+    <!-- <link rel="stylesheet" href="bower_components/html5-boilerplate/css/main.css"> -->
+
+    <!-- Loading Bootstrap -->
+    <link href="bower_components/flat-ui-official/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Loading Flat UI -->
+    <link href="bower_components/flat-ui-official/css/flat-ui.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="bower_components/jcrop/css/jquery.Jcrop.css" type="text/css"/>
+
+    <link rel="stylesheet" href="bower_components/bootstrap-combobox/css/bootstrap-combobox.css" type="text/css"/>
+
+    <!--<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">-->
+    <link rel="stylesheet" href="bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css"/>
+
+
+    <link rel="stylesheet" href="bower_components/angular-bootstrap-nav-tree/dist/abn_tree.css"/>
+
+    <!--<link rel="stylesheet" href="bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.css">-->
+
+    <link rel="stylesheet" href="css/app.css"/>
+
+    <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
+</head>
+<body ng-controller="AuthorizationCtrl as authorizationCtrl">
+<!--[if lt IE 7]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+    your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<div class="container" ng-controller="HatCtr as hatCtrl">
+    <!--<h1 class="site-title">
+        <img src="bower_components/flat-ui-official/images/icons/svg/clipboard.svg" alt="Pensils">
+        Video portal administration panel
+    </h1>-->
+
+    <hr/>
+
+    <!--<div class="row demo-row">
+        <div class="col-xs-12">
+            <nav class="navbar navbar-inverse navbar-embossed" role="navigation">
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li ng-class="{ active:hatCtrl.isActive('movies') }"><a href="#/movies">Movies</a></li>
+                        <li ng-class="{ active:hatCtrl.isActive('staff') }"><a href="#/staff">Staff</a></li>
+                        <li ng-class="{ active:hatCtrl.isActive('professions') }"><a href="#/professions">Professions</a></li>
+                        <li ng-class="{ active:hatCtrl.isActive('awards') }"><a href="#/awards">Awards</a></li>
+                        <li ng-class="{ active:hatCtrl.isActive('categories') }"><a href="#/categories">Categories</a></li>
+                        <li ng-class="{ active:hatCtrl.isActive('genres') }"><a href="#/genres">Genres</a></li>
+                        <li ng-class="{ active:hatCtrl.isActive('countries') }"><a href="#/countries">Countries</a></li>
+                        <li ng-class="{ active:hatCtrl.isActive('rightholders') }"><a href="#/rightholders">Правообладатели</a></li>
+                        <li ng-class="{ active:hatCtrl.isActive('images') }"><a href="#/images">Images</a></li>
+                    </ul>
+                </div>&lt;!&ndash; /.navbar-collapse &ndash;&gt;
+                </nav>&lt;!&ndash; /navbar &ndash;&gt;
+            </div>
+        </div>-->
+
+    <div class="row">
+        <div class="col-xs-12 text-center">
+            <div class="btn-group">
+                <a class="btn btn-primary" ng-class="{ 'btn-inverse active':hatCtrl.isActive('table') }" href="#/home">Стол</a>
+                <a class="btn btn-primary" ng-class="{ 'btn-inverse active':hatCtrl.isActive('banquet') }"
+                   href="#/home/banquet">Банкет</a>
+            </div>
+        </div>
+    </div>
+
+    <hr/>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <h3>
+                Название ресторана
+            </h3>
+        </div>
+    </div>
+
+</div>
+
+<div ng-view>
+    <!--Content here-->
+</div>
+
+<hr/>
+
+<div class="container" ng-show="authorizationCtrl.isAuthorized()">
+    <div class="row">
+        <div class="col-xs-12">
+            Вы вошли как {{authorizationCtrl.user.firstName}} {{authorizationCtrl.user.lastName}}
+            ({{authorizationCtrl.user.email}})
+        </div>
+    </div>
+    <div class="row" ng-show="authorizationCtrl.isAdmin()">
+        <div class="col-xs-2">
+            <a href="#/users" class="btn btn-embossed btn-primary">
+                Все пользователи
+            </a>
+        </div>
+        <div class="col-xs-2">
+            <a href="#/orders" class="btn btn-embossed btn-primary">
+                Все заказы
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<div class="container" ng-show="authorizationCtrl.showStatusBar">
+    <div class="row" ng-show="authorizationCtrl.isFormSended">
+        <div class="col-xs-1">
+            <img src="./img/ajax-loader.gif" alt="loading"/>
+        </div>
+        <div class="col-xs-4">
+            Получение информации о пользователе
+        </div>
+    </div>
+    <div class="row" ng-show="authorizationCtrl.showErrorMessage">
+        <div class="col-xs-12">
+            {{authorizationCtrl.errorMessage}}
+        </div>
+    </div>
+</div>
+
+
+<!-- In production use:
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+-->
+
+<script src="bower_components/flat-ui-official/js/jquery-1.8.3.min.js"></script>
+<script src="bower_components/flat-ui-official/js/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="bower_components/flat-ui-official/js/jquery.ui.touch-punch.min.js"></script>
+<script src="bower_components/flat-ui-official/js/bootstrap.min.js"></script>
+<script src="bower_components/flat-ui-official/js/bootstrap-select.js"></script>
+<script src="bower_components/flat-ui-official/js/bootstrap-switch.js"></script>
+<script src="bower_components/flat-ui-official/js/flatui-checkbox.js"></script>
+<script src="bower_components/flat-ui-official/js/flatui-radio.js"></script>
+<script src="bower_components/flat-ui-official/js/jquery.tagsinput.js"></script>
+<script src="bower_components/flat-ui-official/js/jquery.placeholder.js"></script>
+
+<script src="bower_components/bootstrap-combobox/js/bootstrap-combobox.js"></script>
+<script type="text/javascript" src="bower_components/moment/moment.js"></script>
+
+
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/angular-truncate/src/truncate.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="bower_components/angular-resource/angular-resource.js"></script>
+<script type="text/javascript"
+        src="bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
+
+<!-- Fix for old browsers -->
+<script src="bower_components/es5-shim/es5-shim.js"></script>
+<script src="bower_components/angular-file-upload/angular-file-upload.js"></script>
+
+<script src="bower_components/jcrop/js/jquery.Jcrop.min.js"></script>
+
+<script src="bower_components/angular-encode-uri/dist/angular-encode-uri.min.js"></script>
+
+<script src="bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput.js"></script>
+<script src="bower_components/bootstrap-tagsinput/dist/bootstrap-tagsinput-angular.js"></script>
+
+<script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/angular-bootstrap-nav-tree/dist/abn_tree_directive.js"></script>
+
+<script src="js/app.js"></script>
+<script src="js/services.js"></script>
+<script src="js/controllers.js"></script>
+<script src="js/filters.js"></script>
+<script src="js/directives.js"></script>
+<!-- <script src="js/config.js"></script> -->
+
+</body>
+</html>

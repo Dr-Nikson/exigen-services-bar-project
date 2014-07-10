@@ -16,8 +16,9 @@ public interface UserService
      *
      * @param user содержит данные о пользователе (без id)
      * @return Новый пользователь
+     * @throws com.springapp.mvc.exceptions.UserException если пользователь с таким email существует
      */
-    public User registerUser(User user);
+    public User registerUser(User user) throws UserException;
 
     /**
      * Получает пользователя по логину и паролю

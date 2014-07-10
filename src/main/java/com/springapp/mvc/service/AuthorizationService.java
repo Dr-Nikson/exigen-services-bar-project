@@ -5,6 +5,7 @@ import com.springapp.mvc.model.User;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * Created by Nik on 06.07.2014.
@@ -26,8 +27,23 @@ public interface AuthorizationService
      * Метод проверяет права авторизованного пользователя
      *
      * @param role права
-     * @return true, если права у пользователя есть
+     * @return User, если права у пользователя есть
      * @throws AuthorizationException если пользователь не авторизован
      */
-    public boolean checkAccess(UserRoles role, HttpSession session) throws AuthorizationException;
+    public User checkAccess(UserRoles role, HttpSession session) throws AuthorizationException;
+
+    /**
+     * Метод проверяет права авторизованного пользователя
+     *
+     * @param roles массив прав
+     * @return User, если права у пользователя есть
+     * @throws AuthorizationException если пользователь не авторизован
+     */
+    public User checkAccess(List<UserRoles> roles, HttpSession session) throws AuthorizationException;
+
+
+    public User getActiveUser(HttpSession session) throws AuthorizationException;
+
+
+    public List<UserRoles> getRolesListForAddOrder();
 }
