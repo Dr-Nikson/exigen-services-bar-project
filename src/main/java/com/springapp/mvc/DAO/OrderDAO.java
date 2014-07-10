@@ -59,13 +59,13 @@ public class OrderDAO {
     public List<Order> getOrders(Date startDate, Date endDate) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(startDate);
-        calendar.set(Calendar.HOUR_OF_DAY, startDate.getHours());
-        calendar.set(Calendar.MINUTE, startDate.getMinutes());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
         Date loDate = new Date(calendar.getTime().getTime());
 
         calendar.setTime(endDate);
-        calendar.set(Calendar.HOUR_OF_DAY, endDate.getHours());
-        calendar.set(Calendar.MINUTE, endDate.getMinutes());
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
         Date hiDate = new Date(calendar.getTime().getTime());
         Criteria criteria = this.getCriteria();
         criteria.add(Restrictions.between("startTime", loDate, hiDate));
@@ -119,11 +119,33 @@ public class OrderDAO {
                 .getResultList();
     }
 
-    public List<Order> getOrders(User user, Date date){
+    public List<Order> getOrders(User user, Date byDay)
+    {
 
-        return entityManager.createQuery(
-                "SELECT ord FROM Order ord WHERE ord.user.id = :inUser AND ord.startTime = :date"
-        )
-        .setParameter("inUser",user.getId()).setParameter("date",date).getResultList();
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(byDay);
+
+        /*
+         *   Устанавливаем дату на byDay и время 00:00
+         *   Это - начальная дата
+         */
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 1);
+        Date loDate = new Date(calendar.getTime().getTime());
+
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        Date hiDate = new Date(calendar.getTime().getTime());
+
+        /*
+         *   Делаем выборку с loDate < startTime < hiDate и order.user_id == user.id
+         */
+        Query query = entityManager.createQuery(
+                "SELECT ord FROM Order ord WHERE ord.user.id = :inUser AND ord.startTime >= :loDate AND ord.startTime <= :hiDate")
+                .setParameter("inUser", user.getId())
+                .setParameter("loDate", loDate)
+                .setParameter("hiDate", hiDate);
+
+        return query.getResultList();
     }
 }

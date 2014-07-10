@@ -202,7 +202,7 @@
             personsNum: 2,
             ownAlcohol: false
         };
-        //self.$scope.todayDate = new Date(new Date().getTime() + 21 * 60 * 60 * 1000);
+        //self.$scope.todayDate = new Date(new Date().getTime() + 23 * 60 * 60 * 1000);
         self.$scope.todayDate = new Date();
         self.$scope.tomorrowDate = new Date(self.$scope.todayDate.getTime() + 24 * 60 * 60 * 1000);
         self.$scope.tomorrowDate.setHours(0);
@@ -249,11 +249,26 @@
          self.$scope.timeInputTrackingDate = self.$scope.todayDate;
          }*/
 
+        var isTodayDateAvailable = function () {
+            return !( (self.$scope.todayDate.getHours() == 22 && self.$scope.todayDate.getMinutes() >= 30)
+                || (self.$scope.todayDate.getHours() >= 23) );
+        };
+
+
+        var getMinimalDate = function () {
+            if (isTodayDateAvailable()) {
+                return self.$scope.todayDate;
+            }
+            else {
+                return self.$scope.tomorrowDate;
+            }
+        };
+
 
         self.$scope.$watch('tmpOrderDate.raw', function (nv) {
             if (!nv)
                 return;
-            var tmp1 = new Date(self.$scope.timeInputTrackingDate.getTime());
+            var tmp1 = new Date(getMinimalDate().getTime());
             tmp1.setHours(0);
             tmp1.setMinutes(0);
             tmp1.setSeconds(0);
@@ -264,12 +279,21 @@
             tmp2.setSeconds(0);
             tmp2.setMilliseconds(0);
 
+            var ret = new Date(nv.getTime());
 
-            if (tmp2.getTime() < tmp1.getTime())
+            //console.log('date1'tmp2.);
+
+            if (tmp2.getTime() < tmp1.getTime()) {
+                self.$scope.tooltipTriggers.startTime = true;
                 return;
+            }
+            else if (tmp2.getTime() == tmp1.getTime()) {
+                ret = new Date(getMinimalDate().getTime());
+            }
 
             self.$scope.tmpOrderDate.formatted = $filter('date')(nv, 'dd-MM-yyyy');
-            self.$scope.dataChoosedBy = 'calendar';
+            //self.$scope.dataChoosedBy = 'calendar';
+            self.chooseDate(ret, 'calendar');
         });
 
         //console.log(self.$scope.todayDate);
@@ -341,6 +365,10 @@
                     self.$scope.errorMessage = 'Пользователь с таким email существует. Проверьте пароль от аккаунта на Вашей почте'
                         + ' и выполните вход.';
                     break;
+                case 'order.duplicate':
+                    self.$scope.errorMessage = 'Невозможно добавить заказ - у вас уже есть бронь на эту дату.'
+                        + 'Если Вы хотите поменять условия брони - обратитесь к администратору по номеру 8(800)923-12-32';
+                    break;
                 default :
                     self.$scope.errorMessage = 'Неизвестная ошибка';
                     break;
@@ -407,7 +435,7 @@
 
 
         self.initCurrentDataChosen = function () {
-            if (self.$scope.todayDate.getHours() >= 22 && self.$scope.todayDate.getMinutes() >= 30) {
+            if (!isTodayDateAvailable()) {
                 self.$scope.todayBtnDisabled = true;
                 self.$scope.dataChoosedBy = 'tomorrow';
                 self.$scope.timeInputTrackingDate = self.$scope.tomorrowDate;

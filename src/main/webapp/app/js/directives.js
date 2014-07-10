@@ -162,24 +162,62 @@
                 };
 
 
-                $element.tooltip({delay: { show: 500, hide: 100 }, trigger: 'manual'});
-
-                $element.on('hidden.bs.tooltip', function () {
-                    showed = false;
-                });
-
-                $element.on('show.bs.tooltip', function () {
+                var showedTooltipEventHandler = function () {
                     showed = true;
-                });
+                };
 
-                $element.hover(showTooltip, hideTooltip);
+                var hiddenTooltipEventHandler = function () {
+                    showed = false;
+                };
 
-                $scope.$watch('showTooltipTrigger', function (nv) {
-                    if (!nv)
-                        return;
-                    showTooltip();
-                    $scope.showTooltipTrigger = false;
-                });
+                var initScopeWatcher = function (sFun) {
+                    $scope.$watch('showTooltipTrigger', function (nv) {
+                        if (!nv)
+                            return;
+                        sFun();
+                        $scope.showTooltipTrigger = false;
+                    });
+                };
+
+                var initTooltip = function (hEvent, sEvent, s, h, sWatcherFun) {
+
+                    $element.tooltip({delay: { show: 500, hide: 100 }, trigger: 'manual'});
+
+                    $element.on('hidden.bs.tooltip', hEvent);
+
+                    $element.on('show.bs.tooltip', sEvent);
+
+                    $element.hover(s, h);
+
+                    initScopeWatcher(sWatcherFun);
+                };
+
+                var emptyFun = function () {
+
+                };
+
+
+                //data-toggle="tooltip"
+                if (attrs.toggle == 'tooltip') {
+                    initTooltip(hiddenTooltipEventHandler, showedTooltipEventHandler, showTooltip, hideTooltip, showTooltip);
+                }
+                else if (attrs.toggle == 'hide-only') {
+                    initTooltip(showedTooltipEventHandler, hiddenTooltipEventHandler, emptyFun, hideTooltip, showTooltip);
+                }
+                else if (attrs.toggle == 'delayed-hide') {
+                    var tmpTimeoutPrimise;
+                    initTooltip(hiddenTooltipEventHandler, showedTooltipEventHandler, emptyFun, emptyFun, function () {
+
+                        if (tmpTimeoutPrimise)
+                            $timeout.cancel(tmpTimeoutPrimise);
+
+                        tmpTimeoutPrimise = $timeout(hideTooltip, 3000);
+                        showTooltip();
+                    });
+                }
+                else {
+                    initTooltip(showedTooltipEventHandler, hiddenTooltipEventHandler, emptyFun, emptyFun);
+                }
             }
         };
     }]);
@@ -207,17 +245,17 @@
     }]);
 
 
-    app.factory('myHttpInterceptor', function ($q, $window) {
-        return function (promise) {
-            return promise.then(function (response) {
-                $("#spinner").hide();
-                return response;
-            }, function (response) {
-                $("#spinner").hide();
-                return $q.reject(response);
-            });
-        };
-    });
+    /*app.factory('myHttpInterceptor', function ($q, $window) {
+     return function (promise) {
+     return promise.then(function (response) {
+     $("#spinner").hide();
+     return response;
+     }, function (response) {
+     $("#spinner").hide();
+     return $q.reject(response);
+     });
+     };
+     });*/
 
     /*app.directive('mySwitch', ['$timeout', function ($timeout) {
      return {
