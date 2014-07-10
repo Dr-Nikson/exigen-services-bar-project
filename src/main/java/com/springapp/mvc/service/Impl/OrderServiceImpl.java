@@ -2,7 +2,6 @@ package com.springapp.mvc.service.Impl;
 
 import com.springapp.mvc.DAO.OrderDAO;
 import com.springapp.mvc.DAO.RestaurantTableDAO;
-import com.springapp.mvc.exceptions.OrderDuplicateExeption;
 import com.springapp.mvc.exceptions.OrderException;
 import com.springapp.mvc.model.Order;
 import com.springapp.mvc.model.RestaurantTable;
