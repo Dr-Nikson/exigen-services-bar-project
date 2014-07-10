@@ -1,5 +1,6 @@
 package com.springapp.mvc.service;
 
+import com.springapp.mvc.exceptions.OrderDuplicateExeption;
 import com.springapp.mvc.exceptions.OrderException;
 import com.springapp.mvc.model.Order;
 import com.springapp.mvc.model.User;
@@ -18,7 +19,7 @@ public interface OrderService
      * @param order только поля startTime,personsNum,allRestaurant
      * @return true - если заказ можно разместить
      */
-    public boolean checkOrderAvailability(Order order);
+    public boolean checkOrderAvailability(Order order) throws OrderException, OrderDuplicateExeption;
 
 
     /**
@@ -68,6 +69,7 @@ public interface OrderService
      */
     public List<Order> getOrders(Date day);
 
+    public List<Order> getOrders(User user,Date date);
 
     /**
      * Получить список заказов в промежуток дат

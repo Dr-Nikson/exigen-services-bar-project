@@ -118,4 +118,12 @@ public class OrderDAO {
                 .setParameter("inUser", user.getId())
                 .getResultList();
     }
+
+    public List<Order> getOrders(User user, Date date){
+
+        return entityManager.createQuery(
+                "SELECT ord FROM Order ord WHERE ord.user.id = :inUser AND ord.startTime = :date"
+        )
+        .setParameter("inUser",user.getId()).setParameter("date",date).getResultList();
+    }
 }

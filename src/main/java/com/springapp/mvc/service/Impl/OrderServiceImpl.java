@@ -2,6 +2,7 @@ package com.springapp.mvc.service.Impl;
 
 import com.springapp.mvc.DAO.OrderDAO;
 import com.springapp.mvc.DAO.RestaurantTableDAO;
+import com.springapp.mvc.exceptions.OrderDuplicateExeption;
 import com.springapp.mvc.exceptions.OrderException;
 import com.springapp.mvc.model.Order;
 import com.springapp.mvc.model.RestaurantTable;
@@ -37,6 +38,10 @@ public class OrderServiceImpl implements OrderService {
     public boolean checkOrderAvailability(Order order) {
         Long reservedSpace = orderDAO.getReservedSpace(order.getStartTime());
         Long availableSpace = tableDAO.getAvailableSpace();
+        List<Order> nowOrders = getOrders(order.getUser(),order.getStartTime());
+        if(nowOrders.size() != 0)  //проверка на попытку повторного заказа одного пользователя на ту же дату
+            //throw new OrderExeption("Попытка повторного заказа");
+            return false;
         return (availableSpace - reservedSpace) >= order.getPersonsNum();
     }
 
@@ -98,6 +103,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getOrders(Date day) {
         return orderDAO.getOrders(day);
+    }
+
+    @Override
+    public List<Order> getOrders(User user,Date date) {
+        return orderDAO.getOrders(user, date);
     }
 
     @Override
